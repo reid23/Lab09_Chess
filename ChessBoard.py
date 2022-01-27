@@ -75,6 +75,14 @@ class Board:
 
 
     def T(self, arr=None):
+        """transposes the input 2d array
+
+        Args:
+            arr (list, optional): array to transpose. Defaults to self.gameState.
+
+        Returns:
+            list: copy of arr, transposed.
+        """
         if arr==None: arr=self.gameState
 
         output=arr.copy()
@@ -162,7 +170,7 @@ class Board:
             if self.n==65: raise StopIteration
 
             while True:
-                output = self.gameState[int(self.n/8.05)][self.n%8]
+                output = self.gameState[int(self.n/8.05)][self.n%8].copy()
                 if self.descriminator(output): break
                 self.n+=1
 
@@ -208,7 +216,7 @@ class Board:
             if self.n==8: raise StopIteration
 
             while True:
-                output=self.gameState[self.n]
+                output=self.gameState[self.n].copy()
                 if self.descriminator(output): break
                 self.n+=1
         
@@ -218,7 +226,7 @@ class Board:
             if self.n==8: raise StopIteration
 
             while True:
-                output=self.T()[self.n]
+                output=self.T()[self.n].copy()
                 if self.descriminator(output): break
                 self.n+=1
 
