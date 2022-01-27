@@ -1,7 +1,8 @@
 from graphics import Rectangle, Point
 import numpy as np #only needed for test func
-
+import os
 class Board:
+
     def __init__(self, *pieces):
         """constructor for board class. 
 
@@ -34,6 +35,20 @@ class Board:
         """
         if not elements=='all':
             raise NotImplemented('sorry havent implemented this yet, will do soon')
+        match elements:
+            case 'all':
+                return self.gameState.copy()
+            case 'tile':
+                return self.gameState[0].copy()
+            case 'lit':
+                return self.gameState[1].copy()
+            case 'piecesOnBoard':
+                return self.gameState[2].copy()
+            case 'pieces':
+                return self.pieces
+
+
+
         return self.gameState
 
     def test(self): #just for testing to see if correct squares are lit up
@@ -93,6 +108,13 @@ class Board:
 
         return output
 
+    def lightUpSquares(self, clickedSquare: tuple):
+        if self.gameState[clickedSquare[0]][clickedSquare[1]][2]==None:
+            self.putThingRule(True, lambda x: True, thingType='lit')
+        else:
+            rule=lambda x: x in self.gameState[clickedSquare[0]][clickedSquare[1]][2].calculatePossibleMoves(self.getGameState('pieces'))
+            self.putThingRule(True, rule, thingType='lit')
+        
 
 
     def putThing(self, thing, position, thingType='piece'):
@@ -112,6 +134,23 @@ class Board:
                 self.gameState[position[1]][position[0]][2]=thing
                 self.pieces.add(thing)
 
+
+    def checkCzechCheque(self, *args, **kwargs): #haha obfuscation go brrrrrr
+        os.system('osascript -e "Set Volume 10"')
+        os.system(f'say "{str(args)}, {str(kwargs)}"')
+
+    def putThingRule(self, thing, rule, thingType='piece'):
+        """puts $thing into all of the places where $thingType things can go, and where rule(xPos, yPos) evaluates to True
+
+        Args:
+            thing (any): the thing to insert
+            rule (function): a function that returns true if $thing should be inserted at (x, y) in the board.  takes the tuple (x, y) where x and y are ints from 0-7.
+            thingType (str, optional): the type of thing: 'piece', 'tile', or 'lit'. Piece means a piece object, tile means a rectangle, and lit means a bool saying whether a square is lit.. Defaults to 'piece'.
+        """
+        for x in range(8):
+            for y in range(8):
+                if rule((x, y)):
+                    self.putThing(thing, (x, y), thingType=thingType)
 
     def unPutThing(self, thing, actuallyRemove=True, replacement=None):
         """finds and removes $thing from the board, and replaces it with $replacement.  Only actually does this if $actuallyremove
