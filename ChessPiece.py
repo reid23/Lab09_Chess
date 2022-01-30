@@ -3,7 +3,7 @@
 class ChessPiece:
     """Defines a general chess piece for a chess game"""
 
-    def __init__(self, color, pos):
+    def __init__(self, color: bool, pos: tuple):
         """Creates a new Chess Piece
 
         Args:
@@ -11,20 +11,49 @@ class ChessPiece:
             pos (tuple): initial position of the pawn
         """
 
-        self.color = color
-        self.startPos = pos
+        self._color = color
+        self._startPos = pos
         self.rules = [] # TODO: lambda or list
+    
+    @property
+    def startPos(self):
+        """shouldn't be used directly, just enables doing ChessPiece.startPos to get the position without violating encapsulation (ie this is read-only)"""
+        return self._startPos
+    
+    @property
+    def color(self):
+        """shouldn't be used directly, just enables doing ChessPiece.color to get the color without violating encapsulation (ie this is read-only)"""
+        return self._color
 
-    def calculatePossibleMoves(self, gameState, pos):
+    @staticmethod
+    def _toGlobal(pos: list|tuple, mov: list|tuple) -> tuple:
+        """adds the arguments elementwise to give the end position of a relative movement $mov from an absolute starting position $pos
+
+        Args:
+            pos (list|tuple): global initial position
+            mov (list|tuple): relative movement
+
+        Returns:
+            tuple: the end global position
+        """
+        return tuple(map(sum, zip(pos, mov)))
+        #non-vectorized expansion:
+        #for i in range(len(pos)):
+        # output[i] = pos[i] + mov[i]
+        #basically just adds elementwise
+
+    def calculatePossibleMoves(self, gameState: list, pos: tuple) -> list:
         """Calculates all the possible moves given the game state. Returns a list of tuples representing possible moves.
 
         Args:
             gameState (list): a 8x8x3 matrix [rectangle object, litUp, chessPiece object]
             pos (tuple): current position
+        Returns:
+            list: a list of the tuples representing all possible moves.
         """
         return []
 
-    def checkCheck(self, gameState, pos, move):
+    def checkCheck(self, gameState: list, pos: tuple, move: tuple) -> bool:
         """Verifies if move will cause a checkmate. Returns True if induces a checkmate, False if not.
 
         Args:
@@ -38,8 +67,8 @@ class ChessPiece:
         
         for x in range(8):
             for y in range(8):
-            # will do  lar
-te
+                #TODO: fill this in
+                pass
 
     def getAllMoves(self, pos):
         """Returns a list of tuples of moves from given position
@@ -49,7 +78,7 @@ te
         """
         return []
 
-    def withinBounds(self, move):
+    def withinBounds(self, move: tuple) -> bool:
         """Verifies if move is within the board. Returns True if within bounds, False if not.
 
         Args:
@@ -60,7 +89,8 @@ te
     def getColor(self):
         """Returns color (True if white, False if black)
         """
-        return self.color
+        print('ChessPiece.getColor() is deprecated.  Use ChessPiece.color instead.')
+        return self._color
 
 
 
