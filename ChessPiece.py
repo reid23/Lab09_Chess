@@ -1,5 +1,5 @@
 # Chess Piece
-#%%
+
 class ChessPiece:
     """Defines a general chess piece for a chess game"""
 
@@ -12,12 +12,8 @@ class ChessPiece:
         """
 
         self.color = color
-        self._startPos = pos
+        self.startPos = pos
         self.rules = [] # TODO: lambda or list
-    
-    @property
-    def startPos(self):
-        return self._startPos
 
     def calculatePossibleMoves(self, gameState, pos):
         """Calculates all the possible moves given the game state. Returns a list of tuples representing possible moves.
@@ -42,8 +38,8 @@ class ChessPiece:
         
         for x in range(8):
             for y in range(8):
-            # will do  later
-                pass
+            # will do  lar
+te
 
     def getAllMoves(self, pos):
         """Returns a list of tuples of moves from given position
@@ -76,5 +72,3 @@ class ChessPiece:
     
 
 
-
-# %%
