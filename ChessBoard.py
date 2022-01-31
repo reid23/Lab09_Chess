@@ -3,24 +3,31 @@ import numpy as np #only needed for test func
 import os
 class Board:
 
-    def __init__(self, *pieces):
+    def __init__(self, *pieces, board=None):
         """constructor for board class. 
 
         Args:
             *pieces (piece objects): the chess pieces for this board.
+            board (list): a pre-set board, if needed.  Don't pass.
         """
         self.n=0
         self.iterReturns='squares'
         self.pieces=set(pieces)
-        self.gameState = self._empty(8,8,3)
         self.descriminator=lambda x: True
-        for p in pieces:
-            self.putThing(p, p.startPos) #add this to pieces
-        for x, y in [[x, y] for x in range(8) for y in range(8)]:
-            self.putThing(Rectangle(Point(x-0.5, y-0.5), Point(x+0.5, y+0.5)), (x, y), thingType='tile')
-            self.putThing(bool(x%2 ^ y%2), (x, y), thingType='lit') #white true, black false
-            #the bool() part just does xor(x is even, y is even)
+        if board!=None:
+            self.gameState=board
+        else:
+            self.gameState = self._empty(8,8,3)
+            for p in pieces:
+                self.putThing(p, p.startPos) #add this to pieces
+            for x, y in [[x, y] for x in range(8) for y in range(8)]:
+                self.putThing(Rectangle(Point(x-0.5, y-0.5), Point(x+0.5, y+0.5)), (x, y), thingType='tile')
+                self.putThing(bool(x%2 ^ y%2), (x, y), thingType='lit') #white true, black false
+                #the bool() part just does xor(x is even, y is even)
     
+    def copy(self):
+        return eval(repr(self))
+
     def getGameState(self, elements='all'):
         """gets the current game state, with the elements specified
 
@@ -109,9 +116,7 @@ class Board:
         return output
 
     def lightUpSquares(self, clickedSquare: tuple):
-        if self.gameState[clickedSquare[0]][clickedSquare[1]][2]==None:
-            self.putThingRule(True, lambda x: True, thingType='lit')
-        else:
+        if self.gameState[clickedSquare[0]][clickedSquare[1]][2]!=None:
             rule=lambda x: x in self.gameState[clickedSquare[0]][clickedSquare[1]][2].calculatePossibleMoves(self.getGameState('pieces'))
             self.putThingRule(True, rule, thingType='lit')
         
