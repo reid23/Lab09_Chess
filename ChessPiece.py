@@ -61,14 +61,22 @@ class ChessPiece:
             pos (tuple (a, b) where a and b are int): Represents a possible position after a move
             move (tuple (a, b) where a and b are int): Represents a possible position after a move
         """
-        newGameState = gameState.copy()
-        newGameState[move[0]][move[1]][2] = newGameState[pos[0]][pos[1]][2]
-        newGameState[pos[0]][pos[1]][2] = None
+
+        # will bring the below back once everything is merged
+        # newGameState = gameState.getGameState('pieces') # implemented~
+        # replace with moved chess piece
+        # newGameState[move[0]][move[1]][2] = newGameState[pos[0]][pos[1]][2]
+        # newGameState[pos[0]][pos[1]][2] = None
         
-        for x in range(8):
-            for y in range(8):
-                #TODO: fill this in
-                pass
+        # for x in range(8):
+        #     for y in range(8):
+        #         for move in newGameState[x][y][2].getAllMoves():
+        #             if not(self.withinBounds(move)):
+        #                 continue
+        #             if newGameState[move[0]][move[1]][2].getType() == "King" and newGameState[x][y][2].getColor() != newGameState[x][y][2].getColor():
+        #                 return True
+        
+        return False
 
     def getAllMoves(self, pos):
         """Returns a list of tuples of moves from given position
@@ -91,7 +99,6 @@ class ChessPiece:
         """
         print('ChessPiece.getColor() is deprecated.  Use ChessPiece.color instead.')
         return self._color
-
 
 
 

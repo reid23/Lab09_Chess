@@ -1,19 +1,18 @@
-# Pawn Chess Piece
+# Queen Chess Piece
 from ChessPiece import ChessPiece # remove later
 
-class Pawn (ChessPiece):
+class Knight (ChessPiece):
+    """Defines a Knight chess piece for a chess game"""
+
     def __init__(self, color, pos):
-        """Creates a new Pawn
+        """Creates a new Knight!
 
         Args:
             color (bool): True if white, False if black
             pos (tuple): initial position of the pawn
         """
         super().__init__(color, pos)
-        if color: # white
-            self.rules = [(0,1),(1,1),(-1,1),(0,2)]
-        else:
-            self.rules = [(0,-1),(1,-1),(-1,-1),(0,-2)]
+        self.rules = [(2,1),(2,-1),(1,2),(1,-2),(-2,1),(-2,-1),(-1,2),(-1,-2)]
              
     def calculatePossibleMoves(self, gameState, pos):
         """Calculates all the possible moves given the game state. Returns a list of tuples representing possible moves.
@@ -35,13 +34,15 @@ class Pawn (ChessPiece):
     def getType(self):
         """Returns type of chess piece as a string
         """
-        return "Pawn"
+        return "Knight"
     
 
 def main():
     # testing Pawn
-    p1 = Pawn(True, (1,1))
-    print(p1.calculatePossibleMoves(True, (0,0)))
+    kn1 = Knight(True, (1,1))
+    print(kn1.calculatePossibleMoves(True, (5,5)))
+    # [(7, 6), (7, 4), (6, 7), (6, 3), (3, 6), (3, 4), (4, 7), (4, 3)]
+    # looks good?
 
 if __name__ == "__main__": main()
 
