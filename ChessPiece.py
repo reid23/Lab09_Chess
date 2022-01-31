@@ -61,6 +61,7 @@ class ChessPiece:
             pos (tuple (a, b) where a and b are int): Represents a possible position after a move
             move (tuple (a, b) where a and b are int): Represents a possible position after a move
         """
+
         # will bring the below back once everything is merged
         # newGameState = gameState.getGameState('pieces') # implemented~
         # replace with moved chess piece
@@ -92,17 +93,12 @@ class ChessPiece:
             move (tuple (a, b) where a and b are int): Represents a possible move
         """
         return 0 <= move[0] <= 7 and 0 <= move[1] <= 7 
-  
+
     def getColor(self):
-        """Returns color (True if white, False if black, None if empty)
+        """Returns color (True if white, False if black)
         """
         print('ChessPiece.getColor() is deprecated.  Use ChessPiece.color instead.')
         return self._color
-  
-    def getType(self):
-        """Returns type of chess piece as a string
-        """
-        return "None"
 
 
 

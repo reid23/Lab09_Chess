@@ -2,16 +2,41 @@ from graphics import Rectangle, Point
 import numpy as np #only needed for test func
 import os
 class Board:
+<<<<<<< HEAD
+    def __init__(self, *pieces, board=None):
+=======
 
     def __init__(self, *pieces):
+>>>>>>> 5c82cdbbb6d0d07c9e5b95ea9049b298289181c9
         """constructor for board class. 
 
         Args:
             *pieces (piece objects): the chess pieces for this board.
+<<<<<<< HEAD
+            board (list): a pre-set board, if needed.  Don't pass.
+=======
+>>>>>>> 5c82cdbbb6d0d07c9e5b95ea9049b298289181c9
         """
         self.n=0
         self.iterReturns='squares'
         self.pieces=set(pieces)
+<<<<<<< HEAD
+        self.descriminator=lambda x: True
+        if board!=None:
+            self.gameState=board
+        else:
+            self.gameState = self._empty(8,8,3)
+            for p in pieces:
+                self.putThing(p, p.startPos) #add this to pieces
+            for x, y in [[x, y] for x in range(8) for y in range(8)]:
+                self.putThing(Rectangle(Point(x-0.5, y-0.5), Point(x+0.5, y+0.5)), (x, y), thingType='tile')
+                self.putThing(bool(x%2 ^ y%2), (x, y), thingType='lit') #white true, black false
+                #the bool() part just does xor(x is even, y is even)
+    
+    def copy(self):
+        return Board(board=self.gameState)
+
+=======
         self.gameState = self._empty(8,8,3)
         self.descriminator=lambda x: True
         for p in pieces:
@@ -21,6 +46,7 @@ class Board:
             self.putThing(bool(x%2 ^ y%2), (x, y), thingType='lit') #white true, black false
             #the bool() part just does xor(x is even, y is even)
     
+>>>>>>> 5c82cdbbb6d0d07c9e5b95ea9049b298289181c9
     def getGameState(self, elements='all'):
         """gets the current game state, with the elements specified
 
@@ -113,7 +139,8 @@ class Board:
             rule=lambda x: x in self.gameState[clickedSquare[0]][clickedSquare[1]][2].calculatePossibleMoves(self.getGameState('pieces'))
             self.putThingRule(True, rule, thingType='lit')
         
-
+    def __sub__(self, other):
+        pass
 
     def putThing(self, thing, position, thingType='piece'):
         """puts $thing into the board at $position
