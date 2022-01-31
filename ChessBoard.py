@@ -2,7 +2,6 @@ from graphics import Rectangle, Point
 import numpy as np #only needed for test func
 import os
 class Board:
-
     def __init__(self, *pieces, board=None):
         """constructor for board class. 
 
@@ -26,7 +25,7 @@ class Board:
                 #the bool() part just does xor(x is even, y is even)
     
     def copy(self):
-        return eval(repr(self))
+        return Board(board=self.gameState)
 
     def getGameState(self, elements='all'):
         """gets the current game state, with the elements specified
@@ -120,7 +119,8 @@ class Board:
             rule=lambda x: x in self.gameState[clickedSquare[0]][clickedSquare[1]][2].calculatePossibleMoves(self.getGameState('pieces'))
             self.putThingRule(True, rule, thingType='lit')
         
-
+    def __sub__(self, other):
+        pass
 
     def putThing(self, thing, position, thingType='piece'):
         """puts $thing into the board at $position
