@@ -109,9 +109,7 @@ class Board:
         return output
 
     def lightUpSquares(self, clickedSquare: tuple):
-        if self.gameState[clickedSquare[0]][clickedSquare[1]][2]==None:
-            self.putThingRule(True, lambda x: True, thingType='lit')
-        else:
+        if self.gameState[clickedSquare[0]][clickedSquare[1]][2]!=None:
             rule=lambda x: x in self.gameState[clickedSquare[0]][clickedSquare[1]][2].calculatePossibleMoves(self.getGameState('pieces'))
             self.putThingRule(True, rule, thingType='lit')
         
