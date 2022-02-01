@@ -121,7 +121,13 @@ class Board:
             self.putThingRule(True, rule, thingType='lit')
         
     def __sub__(self, other):
-        pass
+        if not isinstance(other, Board):
+            raise NotImplementedError
+        
+        output=Board()
+        for i in range(8):
+            for j in range(8):
+                if other.
 
     def putThing(self, thing, position, thingType='piece'):
         """puts $thing into the board at $position
@@ -187,6 +193,9 @@ class Board:
                                 if k in self.pieces: self.pieces.remove(k)
         return poses
     
+    def getThing(self, x, y):
+        return self.gameState[x][y].copy()
+
     def __call__(self, things='all', descriminator=None):
         """call method for board, for generating an iterable for for loops.  ie 'for _ in Board(): pass'
 
