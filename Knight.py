@@ -12,7 +12,7 @@ class Knight (ChessPiece):
             pos (tuple): initial position of the pawn
         """
         super().__init__(color, pos)
-        self.rules = [(2,1),(2,-1),(1,2),(1,-2),(-2,1),(-2,-1),(-1,2),(-1,-2)]
+        self.rules = ((2,1),(2,-1),(1,2),(1,-2),(-2,1),(-2,-1),(-1,2),(-1,-2))
              
     def calculatePossibleMoves(self, gameState, pos):
         """Calculates all the possible moves given the game state. Returns a list of tuples representing possible moves.
@@ -26,15 +26,11 @@ class Knight (ChessPiece):
         for rel in self.rules:
             move = (pos[0]+rel[0], pos[1]+rel[1]) 
             # if move does not cause a checkmate, is within bounds, and will not overlap w/ same color piece
-            color = not(self.color) # gameState[move[0]][move[1]][2].getColor() # will bring this back once merged :>
-            if not(self.checkCheck(gameState, pos, move)) and self.withinBounds(move) and color != None and color != self.color:
+            color = not self.color # gameState[move[0]][move[1]][2].getColor() # will bring this back once merged :>
+            if (not self.checkCheck(gameState, pos, move)) and self.withinBounds(move) and color != None and color != self.color:
                 moves.append(move)
         return moves
 
-    def getType(self):
-        """Returns type of chess piece as a string
-        """
-        return "Knight"
     
 
 def main():

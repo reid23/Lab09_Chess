@@ -1,6 +1,7 @@
 from graphics import Rectangle, Point
 import numpy as np #only needed for test func
 import os
+
 class Board:
     def __init__(self, *pieces, board=None):
         """constructor for board class. 
@@ -276,6 +277,7 @@ class Board:
 
         self.n+=1
         return output
+
 
 
 

@@ -26,7 +26,7 @@ class ChessPiece:
         return self._color
 
     @staticmethod
-    def _toGlobal(pos: list|tuple, mov: list|tuple) -> tuple:
+    def _toGlobal(pos: tuple, mov: tuple) -> tuple:
         """adds the arguments elementwise to give the end position of a relative movement $mov from an absolute starting position $pos
 
         Args:
@@ -93,12 +93,7 @@ class ChessPiece:
             move (tuple (a, b) where a and b are int): Represents a possible move
         """
         return 0 <= move[0] <= 7 and 0 <= move[1] <= 7 
-
-    def getColor(self):
-        """Returns color (True if white, False if black)
-        """
-        print('ChessPiece.getColor() is deprecated.  Use ChessPiece.color instead.')
-        return self._color
+  
 
 
 

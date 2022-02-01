@@ -27,7 +27,7 @@ class Pawn (ChessPiece):
         for rel in self.rules:
             move = (pos[0]+rel[0], pos[1]+rel[1]) 
             # if move does not cause a checkmate, is within bounds, and will not overlap w/ same color piece
-            color = not(self.color) # gameState[move[0]][move[1]][2].getColor() # will bring this back once merged :>
+            color = not self.color # gameState[move[0]][move[1]][2].getColor() # will bring this back once merged :>
             if not(self.checkCheck(gameState, pos, move)) and self.withinBounds(move) and color != None and color != self.color:
                 moves.append(move)
         return moves
