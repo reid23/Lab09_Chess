@@ -1,7 +1,7 @@
 # Pawn Chess Piece
 from ChessPiece import ChessPiece # remove later
 
-class Pawn (ChessPiece):
+class Pawn(ChessPiece):
     def __init__(self, color, pos):
         """Creates a new Pawn
 
