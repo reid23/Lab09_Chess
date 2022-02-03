@@ -12,7 +12,7 @@ class ChessPiece(Image):
             color (bool): True if white, False if black
             pos (tuple): initial position of the pawn
         """
-        super().__init__(Point(*pos), f"images/{self.__class__.__name__}{'W' if color else 'B'}.svg")
+        super().__init__(Point(*pos), f"images/{self.__class__.__name__}{'W' if color else 'B'}.png")
         self._color = color
         self._startPos = pos
         self.rules = [] # TODO: lambda or list
