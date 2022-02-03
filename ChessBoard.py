@@ -9,7 +9,7 @@ from King import King
 from Bishop import Bishop
 from Rook import Rook
 class Board:
-    def __init__(self, *pieces, board=None):
+    def __init__(self, board=None):
         """constructor for board class. 
 
         Args:
@@ -64,18 +64,21 @@ class Board:
             }
         self.n=0
         self.iterReturns='squares'
-        self.pieces=set(pieces)
+        # self.pieces=set(pieces)
         self.descriminator=lambda x: True
         if board!=None:
             self.gameState=board
         else:
             self.gameState = self._empty(8,8,3)
-            for p in pieces:
-                self.putThing(p, p.startPos) #add this to pieces
+            # for p in pieces:
+                # self.putThing(p, p.startPos) #add this to pieces
             for x, y in [[x, y] for x in range(8) for y in range(8)]:
-                self.putThing(Rectangle(Point(x-0.5, y-0.5), Point(x+0.5, y+0.5)), (x, y), thingType='tile')
-                self.putThing(bool(x%2 ^ y%2), (x, y), thingType='lit') #white true, black false
-
+                r = Rectangle(Point(10*x,10*y), Point(10*(x+1),10*(y+1)))
+                r.setOutline("white")
+                if x%2 == 0 and y%2 == 0 or x%2 != 0 and y%2 != 0:
+                    r.setFill('grey')
+                self.putThing(r, (x, y), thingType='tile')
+                self.putThing(False, (x, y), thingType='lit') #white true, black false
                 #the bool() part just does xor(x is even, y is even)
     
     def __eq__(self, other):
@@ -96,8 +99,8 @@ class Board:
         Returns:
             list: the current game state, a list of shape (8, 8, 3).  the 3 may be a 1 or 2 if less elements are requested.
         """
-        if not elements=='all':
-            raise NotImplemented('sorry havent implemented this yet, will do soon')
+        # if not elements=='all':
+        #     raise NotImplemented('sorry havent implemented this yet, will do soon')
         match elements:
             case 'all':
                 return self.gameState.copy()

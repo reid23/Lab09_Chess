@@ -65,28 +65,31 @@ class ChessPiece:
         """
         return []
 
-    def checkCheck(self, gameState: list, pos: tuple, move: tuple) -> bool:
+    # TODO: MOVE INTO CHESS BOARD BC CIRCULAR IMPORT :>
+    def checkCheck(self, gameState: list, pos: tuple, move: tuple, color: bool) -> bool:
         """Verifies if move will cause a checkmate. Returns True if induces a checkmate, False if not.
 
         Args:
             gameState (list): a 8x8x3 matrix [rectangle object, litUp, chessPiece object]
             pos (tuple (a, b) where a and b are int): Represents a possible position after a move
             move (tuple (a, b) where a and b are int): Represents a possible position after a move
+            color (booll): the color of the current piece being moved. If own king is being 
         """
 
         # will bring the below back once everything is merged
-        # newGameState = gameState.getGameState('pieces') # implemented~
+        newGameState = gameState.getGameState('pieces') # implemented~
         # replace with moved chess piece
-        # newGameState[move[0]][move[1]][2] = newGameState[pos[0]][pos[1]][2]
-        # newGameState[pos[0]][pos[1]][2] = None
+        newGameState[move[0]][move[1]][2] = newGameState[pos[0]][pos[1]][2]
+        newGameState[pos[0]][pos[1]][2] = None
+        curColor = newGameState[move[0]][move[1]][2].color
         
-        # for x in range(8):
-        #     for y in range(8):
-        #         for move in newGameState[x][y][2].getAllMoves():
-        #             if not(self.withinBounds(move)):
-        #                 continue
-        #             if newGameState[move[0]][move[1]][2].getType() == "King" and newGameState[x][y][2].getColor() != newGameState[x][y][2].getColor():
-        #                 return True
+        for x in range(8):
+            for y in range(8):
+                for move in newGameState[x][y][2].getAllMoves(gameState, (x,y)): # filtered for bounds already
+                    nextColor = newGameState[move[0]][move[1]][2].color
+                    # make sure that own king will not be in a checkmate
+                    # if isinstance(newGameState[move[0]][move[1]][2].isInstance(), King) and nextColor == color:
+                        # return True
         
         return False
 
