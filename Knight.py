@@ -25,18 +25,43 @@ class Knight (ChessPiece):
         moves = []
         for rel in self.rules:
             move = (pos[0]+rel[0], pos[1]+rel[1]) 
-            # if move does not cause a checkmate, is within bounds, and will not overlap w/ same color piece
-            color = not self.color # gameState[move[0]][move[1]][2].getColor() # will bring this back once merged :>
-            if (not self.checkCheck(gameState, pos, move)) and self.withinBounds(move) and color != None and color != self.color:
+            print(move)
+            if not self.withinBounds(move): # if not within bounds, ignore move
+                continue
+            color = gameState[move[0]][move[1]][2]
+            isEmptyOrDiffColor = color == None or color != self.color
+            # if doesn't overtake an empty or diifferent color piece
+            if not isEmptyOrDiffColor:
+                continue
+            # if move does not cause a checkmate
+            if (not self.checkCheck(gameState, pos, move, self.color)):
                 moves.append(move)
+        
         return moves
 
-    
+    def getAllMoves(self, gameState, pos):
+        """Returns all possible moves
+
+        Args:
+            gameState: the current game state, a list of shape (8, 8, 3)
+            pos (tuble): current position
+
+        Returns:
+            list of moves (filters out of bounds)
+        """
+        moves = []
+        for rel in self.rules:
+            move = (pos[0]+rel[0], pos[1]+rel[1]) 
+            # if move is within bounds
+            if self.withinBounds(move):
+                moves.append(move)
+
+        return moves
 
 def main():
     # testing Pawn
     kn1 = Knight(True, (1,1))
-    print(kn1.calculatePossibleMoves(True, (5,5)))
+    print(kn1.calculatePossibleMoves([[[True]*8]*8]*3, (5,5)))
     # [(7, 6), (7, 4), (6, 7), (6, 3), (3, 6), (3, 4), (4, 7), (4, 3)]
     # looks good?
 

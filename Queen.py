@@ -26,12 +26,36 @@ class Queen (ChessPiece):
         for rel in self.rules:
             for i in range(1,8): # as far as the Queen wants bc powerful!
                 move = (pos[0]+rel[0]*i, pos[1]+rel[1]*i) 
-                # if move does not cause a checkmate, is within bounds, and will not overlap w/ same color piece
-                color = not self.color # gameState[move[0]][move[1]][2].getColor() # will bring this back once merged :>
-                if (not self.checkCheck(gameState, pos, move)) and self.withinBounds(move) and color != None and color != self.color:
-                    moves.append(move)
+
+                color = gameState[move[0]][move[1]][2].color
+                isEmptyOrDiffColor = color == None or color != self.color
+                # if both withiin bounds and overtakes an empty or diifferent color piece
+                if self.withinBounds(move) and isEmptyOrDiffColor:
+                    # if move does not cause a checkmate
+                    if (not self.checkCheck(gameState, pos, move, self.color)):
+                        moves.append(move)
+        
         return moves
 
+    def getAllMoves(self, gameState, pos):
+        """Returns all possible moves
+
+        Args:
+            gameState: the current game state, a list of shape (8, 8, 3)
+            pos (tuble): current position
+
+        Returns:
+            list of moves (filters out of bounds)
+        """
+        moves = []
+        for rel in self.rules:
+            for i in range(1,8): # as far as the Queen wants bc powerful!
+                move = (pos[0]+rel[0]*i, pos[1]+rel[1]*i) 
+                # if within bounds
+                if self.withinBounds(move):
+                    moves.append(move)
+        
+        return moves
 
 def main():
     # testing Pawn
