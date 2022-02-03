@@ -35,4 +35,4 @@ class Rook(ChessPiece):
             
         
         
-        return nxs+nys+pxs+pys
+        return list(set(tuple(nxs)+tuple(nys)+tuple(pxs)+tuple(pys))) #make tuple to make hashable, make set and back to remove duplicates

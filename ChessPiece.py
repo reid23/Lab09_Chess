@@ -15,6 +15,9 @@ class ChessPiece:
         self._startPos = pos
         self.rules = [] # TODO: lambda or list
     
+    def copy(self):
+        return type(self)(color=self._color, pos=self._startPos)
+    
     @property
     def startPos(self):
         """shouldn't be used directly, just enables doing ChessPiece.startPos to get the position without violating encapsulation (ie this is read-only)"""
