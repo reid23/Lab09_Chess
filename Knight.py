@@ -52,7 +52,7 @@ class Knight (ChessPiece):
         moves = []
         for rel in self.rules:
             move = (pos[0]+rel[0], pos[1]+rel[1]) 
-            # if move does not cause a checkmate, is within bounds, and will not overlap w/ same color piece
+            # if move is within bounds
             if self.withinBounds(move):
                 moves.append(move)
 

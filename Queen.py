@@ -52,7 +52,6 @@ class Queen (ChessPiece):
             for i in range(1,8): # as far as the Queen wants bc powerful!
                 move = (pos[0]+rel[0]*i, pos[1]+rel[1]*i) 
                 # if within bounds
-                
                 if self.withinBounds(move):
                     moves.append(move)
         

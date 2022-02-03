@@ -36,3 +36,7 @@ class Rook(ChessPiece):
         
         
         return nxs+nys+pxs+pys
+
+    def getAllMoves(self, pos):
+        # needs to return list of possible moves only constrained by bounds (so it doesn't matter if it overtakes own piece?)
+        # other option: getAllmoves given game state, which is just calculatePossibleMoves but WITHOUT using checkCheck...
