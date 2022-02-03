@@ -15,6 +15,18 @@ class ChessPiece:
         self._startPos = pos
         self.rules = [] # TODO: lambda or list
     
+    def copy(self):
+        return type(self)(color=self._color, pos=self._startPos)
+    
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self._color}, {self._startPos})"
+    
+    def __hash__(self):
+        return hash(repr(self))
+    
+    def __eq__(self, other):
+        return self._color==other.color and isinstance(other, type(self))
+    
     @property
     def startPos(self):
         """shouldn't be used directly, just enables doing ChessPiece.startPos to get the position without violating encapsulation (ie this is read-only)"""
@@ -96,14 +108,4 @@ class ChessPiece:
             move (tuple (a, b) where a and b are int): Represents a possible move
         """
         return 0 <= move[0] <= 7 and 0 <= move[1] <= 7 
-  
-
-
-
-
-
-    
-
-    
-
 

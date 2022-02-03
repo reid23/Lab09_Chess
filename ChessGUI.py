@@ -56,7 +56,6 @@ class ChessGUI:
         Args:
             msg (str): new message for prompt box
         """
-
         self.prompt.setText(msg) # TODO: fix length of message, needs to wrap :)
     
 

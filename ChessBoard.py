@@ -1,7 +1,13 @@
+from inspect import Attribute
 from graphics import Rectangle, Point
 import numpy as np #only needed for test func
 import os
-
+from Pawn import Pawn
+from Queen import Queen
+from Knight import Knight
+from King import King
+from Bishop import Bishop
+from Rook import Rook
 class Board:
     def __init__(self, board=None):
         """constructor for board class. 
@@ -10,6 +16,52 @@ class Board:
             *pieces (piece objects): the chess pieces for this board.
             board (list): a pre-set board, if needed.  Don't pass.
         """
+        if not pieces:
+            pieces={
+                Pawn(True, (0,1)),
+                Pawn(False, (0,6)),
+
+                Pawn(True, (1,1)),
+                Pawn(False, (1,6)),
+
+                Pawn(True, (2,1)),
+                Pawn(False, (2,6)),
+
+                Pawn(True, (3,1)),
+                Pawn(False, (3,6)),
+
+                Pawn(True, (4,1)),
+                Pawn(False, (4,6)),
+
+                Pawn(True, (5,1)),
+                Pawn(False, (5,6)),
+
+                Pawn(True, (6,1)),
+                Pawn(False, (6,6)),
+
+                Pawn(True, (7,1)),
+                Pawn(False, (7,6)),
+
+                Knight(True, (1,0)),
+                Knight(True, (6,0)),
+                Knight(False, (1,7)),
+                Knight(False, (6,7)),
+
+                Rook(True, (0,0)),
+                Rook(True, (7,0)),
+                Rook(False, (0,7)),
+                Rook(False, (7,7)),
+
+                Bishop(True, (2,0)),
+                Bishop(True, (5,0)),
+                Bishop(False, (2,7)),
+                Bishop(False, (5,7)),
+
+                King(True, (4,0)),
+                King(False, (4,7)),
+                Queen(True, (3,0)),
+                Queen(False, (3,7)),
+            }
         self.n=0
         self.iterReturns='squares'
         # self.pieces=set(pieces)
@@ -28,8 +80,10 @@ class Board:
                 self.putThing(r, (x, y), thingType='tile')
                 self.putThing(False, (x, y), thingType='lit') #white true, black false
                 #the bool() part just does xor(x is even, y is even)
+    
+    def __eq__(self, other):
+        return self.gameState==other.getGameState()
 
-        
     def copy(self):
         return Board(board=self.gameState)
 
@@ -53,11 +107,11 @@ class Board:
             case 'tile':
                 return self.gameState[0].copy()
             case 'lit':
-                return self.gameState[1].copy()
+                return self.gameState[1]
             case 'piecesOnBoard':
                 return self.gameState[2].copy()
             case 'pieces':
-                return self.pieces
+                return self.pieces.copy()
 
 
 
@@ -126,7 +180,27 @@ class Board:
             self.putThingRule(True, rule, thingType='lit')
         
     def __sub__(self, other):
-        pass
+        """subtraction between board classes.  don't call directly, do changes=oldBoard-newBoard
+
+        Args:
+            other (the other board): a board object, the new state
+
+        Raises:
+            NotImplementedError: if $other isn't a board object
+
+        Returns:
+            tuple: the differences in the form ((x, y, z), thing), where (x, y, z) describes the position and the thing is the new thing.
+        """
+        if not isinstance(other, Board):
+            raise NotImplementedError
+        
+        output=[]
+        for i in range(8):
+            for j in range(8):
+                for k in range(1,3):
+                    if not other.getThing(i, j, k)==self.gameState[i][j][k]:
+                        output.append(((i, j, k), self.gameState[i][j][k]))
+        return tuple(output)
 
     def putThing(self, thing, position, thingType='piece'):
         """puts $thing into the board at $position
@@ -192,6 +266,11 @@ class Board:
                                 if k in self.pieces: self.pieces.remove(k)
         return poses
     
+    def getThing(self, x, y, z=None):
+        if z!=None:
+            return self.gameState[x][y][z]
+        return self.gameState[x][y].copy()
+
     def __call__(self, things='all', descriminator=None):
         """call method for board, for generating an iterable for for loops.  ie 'for _ in Board(): pass'
 
@@ -292,22 +371,22 @@ class Board:
 
 
 if __name__ == '__main__':
-    #just some test cases
-    B=Board()
-    B.test()
+    old=Board()
+    new=Board()
 
-    B.putThing('test', (5,7))
+    moves = {
+        (0,0),
+        (1,1),
+        (2,2),
+        (3,3),
+        (4,4),
+        (5,5),
+        (6,6),
+        (7,7),
+    }
 
-    print(B.unPutThing('test', False))
+    new.putThing(True, (5,5), thingType='lit')
+    new.putThingRule(True, lambda x: x in moves, thingType='lit')
 
-    B.putThing('test', (3,4))
-
-    print(B.unPutThing(str, False))
-
-    B.unPutThing('test')
-
-    print(B.unPutThing(str, False))
-
-    for thing in B('piecesInBoard'):
-        print(thing)
+    print(new-old)
 
