@@ -75,19 +75,9 @@ class Board:
             for x, y in [[x, y] for x in range(8) for y in range(8)]:
                 self.putThing(Rectangle(Point(x-0.5, y-0.5), Point(x+0.5, y+0.5)), (x, y), thingType='tile')
                 self.putThing(bool(x%2 ^ y%2), (x, y), thingType='lit') #white true, black false
+
                 #the bool() part just does xor(x is even, y is even)
     
-    @staticmethod
-    def deepCopy(l):
-        if isinstance(l, list):
-            return [i.deepCopy() for i in l]
-        else:
-            try:
-                return l.copy()
-            except AttributeError:
-                print(f'object {l} was not copied, as it has no copy method.')
-                return l
-
     def __eq__(self, other):
         return self.gameState==other.getGameState()
 
@@ -204,7 +194,7 @@ class Board:
         output=[]
         for i in range(8):
             for j in range(8):
-                for k in range(3):
+                for k in range(1,3):
                     if not other.getThing(i, j, k)==self.gameState[i][j][k]:
                         output.append(((i, j, k), self.gameState[i][j][k]))
         return tuple(output)
@@ -378,12 +368,22 @@ class Board:
 
 
 if __name__ == '__main__':
-    #just some test cases
     old=Board()
     new=Board()
 
-    new.putThing(True, (5,5), thingType='lit')
+    moves = {
+        (0,0),
+        (1,1),
+        (2,2),
+        (3,3),
+        (4,4),
+        (5,5),
+        (6,6),
+        (7,7),
+    }
 
-    print('here')
+    new.putThing(True, (5,5), thingType='lit')
+    new.putThingRule(True, lambda x: x in moves, thingType='lit')
+
     print(new-old)
 
