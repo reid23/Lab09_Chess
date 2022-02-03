@@ -9,7 +9,7 @@ from King import King
 from Bishop import Bishop
 from Rook import Rook
 class Board:
-    def __init__(self, board=None):
+    def __init__(self, *pieces, board=None):
         """constructor for board class. 
 
         Args:
