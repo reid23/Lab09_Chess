@@ -264,8 +264,12 @@ class Board:
         return poses
     
     def getThing(self, x, y, z=None):
-        if z!=None:
+        if z==0:
+            return self.gameState[x][y][z].clone()
+        elif z==1:
             return self.gameState[x][y][z]
+        elif z==2:
+            return self.gameState[x][y][z].copy()
         return self.gameState[x][y].copy()
 
     def __call__(self, things='all', descriminator=None):

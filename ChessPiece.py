@@ -1,6 +1,8 @@
+from graphics import Image, Point
 # Chess Piece
 
-class ChessPiece:
+
+class ChessPiece(Image):
     """Defines a general chess piece for a chess game"""
 
     def __init__(self, color: bool, pos: tuple):
@@ -10,7 +12,7 @@ class ChessPiece:
             color (bool): True if white, False if black
             pos (tuple): initial position of the pawn
         """
-
+        super().__init__(Point(*pos), f"images/{self.__class__.__name__}{'W' if color else 'B'}.png")
         self._color = color
         self._startPos = pos
         self.rules = [] # TODO: lambda or list
