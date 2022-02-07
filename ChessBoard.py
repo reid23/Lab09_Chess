@@ -1,4 +1,3 @@
-from inspect import Attribute
 from graphics import Rectangle, Point
 import numpy as np #only needed for test func
 import os
@@ -86,6 +85,18 @@ class Board:
 
     def copy(self):
         return Board(board=self.gameState)
+    
+    def reset(self):
+        self.gameState = self._empty(8,8,3)
+        # for p in pieces:
+            # self.putThing(p, p.startPos) #add this to pieces
+        for x, y in [[x, y] for x in range(8) for y in range(8)]:
+            r = Rectangle(Point(10*x,10*y), Point(10*(x+1),10*(y+1)))
+            r.setOutline("white")
+            if x%2 == 0 and y%2 == 0 or x%2 != 0 and y%2 != 0:
+                r.setFill('grey')
+            self.putThing(r, (x, y), thingType='tile')
+            self.putThing(False, (x, y), thingType='lit') #white true, black false
 
     def getGameState(self, elements='all'):
         """gets the current game state, with the elements specified
