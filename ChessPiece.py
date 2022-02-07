@@ -1,6 +1,5 @@
+# A general chess piece
 from graphics import Image, Point
-# Chess Piece
-
 
 class ChessPiece(Image):
     """Defines a general chess piece for a chess game"""

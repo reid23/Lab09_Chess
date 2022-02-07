@@ -5,7 +5,7 @@ from Button import Button
 class ChessGUI:
     """GUI for a chess game"""
 
-    def __init__(self, chessBoard: Board):
+    def __init__(self):
         """Creates a new ChessGUI
 
         Args:
@@ -15,7 +15,8 @@ class ChessGUI:
         self.win = GraphWin("Chess: the ultimate game of wit", 800, 600, autoflush = False)
         self.win.setBackground("white")
         self.win.setCoords(-10,-30,150,90)
-        board = chessBoard.getGameState('all') # TODO: change later
+        self.chessBoard = Board()
+        board = self.chessBoard.getGameState('all') # TODO: change later
         for x in range(8):
             for y in range(8):
                 board[x][y][0].draw(self.win)
@@ -43,6 +44,8 @@ class ChessGUI:
 
         self.win.update()
 
+        self.done = False
+
     
     def drawStartBoard(self):
         """Draws the starting board, resets the game
@@ -56,18 +59,55 @@ class ChessGUI:
         Args:
             msg (str): new message for prompt box
         """
-        self.prompt.setText(msg) # TODO: fix length of message, needs to wrap :)
+        l = len(msg)
+        prev = 0
+        cur = 70
+        s = ""
+        while cur < l:
+            s += msg[prev:cur]
+            if msg[cur] != " ":
+                s+="-"
+            else:
+                cur+=1
+            s+="\n"
+            prev = cur
+            cur += 70
+        s+=msg[prev:]
+        self.prompt.setText(s) # TODO: fix length of message, needs to wrap :)
     
 
-    def updateBoard(self):
+    def updateWin(self):
         self.win.update()
+
+    def update(self):
+        pt = self.win.getMouse()
+        
+        if self.quitButton.clicked(pt):
+            self.done = True
+            self.win.close()
+            return
+
+        self.updateWin()
+
+    def isDone(self):
+        """Returns if window should be closed
+
+        Returns:
+            [bool]: true if done, false if not
+        """
+        return self.done
+
         
 
 
 if __name__ == '__main__':
-    b = Board()
+    b = Board(None)
     cGUI = ChessGUI(b)
-    cGUI.updateBoard()
+    cGUI.updatePrompt("ghello there my name is alison this is a test because i don't know what else to say hello hello everything is awesome no i'm not qutoing a movieeee")
+    cGUI.updateWin()
+
+    while not cGUI.isDone():
+        cGUI.update()
     
     
 
