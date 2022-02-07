@@ -1,3 +1,4 @@
+# Bishop Chess Piece
 from ChessPiece import ChessPiece
 
 class Bishop(ChessPiece):

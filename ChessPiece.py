@@ -1,4 +1,4 @@
-# Chess Piece
+# A general chess piece
 
 class ChessPiece:
     """Defines a general chess piece for a chess game"""

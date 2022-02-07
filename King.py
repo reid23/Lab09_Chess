@@ -1,3 +1,4 @@
+# King Chess Piece
 #%%
 from ChessPiece import ChessPiece
 #%%

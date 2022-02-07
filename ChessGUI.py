@@ -5,7 +5,7 @@ from Button import Button
 class ChessGUI:
     """GUI for a chess game"""
 
-    def __init__(self, chessBoard: Board):
+    def __init__(self):
         """Creates a new ChessGUI
 
         Args:
@@ -15,7 +15,8 @@ class ChessGUI:
         self.win = GraphWin("Chess: the ultimate game of wit", 800, 600, autoflush = False)
         self.win.setBackground("white")
         self.win.setCoords(-10,-30,150,90)
-        board = chessBoard.getGameState('all') # TODO: change later
+        self.chessBoard = Board()
+        board = self.chessBoard.getGameState('all') # TODO: change later
         for x in range(8):
             for y in range(8):
                 board[x][y][0].draw(self.win)
@@ -86,7 +87,7 @@ class ChessGUI:
             self.win.close()
             return
 
-        cGUI.updateWin()
+        self.updateWin()
 
     def isDone(self):
         """Returns if window should be closed

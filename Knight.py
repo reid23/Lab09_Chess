@@ -1,5 +1,5 @@
 # Queen Chess Piece
-from ChessPiece import ChessPiece # remove later
+from ChessPiece import ChessPiece 
 
 class Knight (ChessPiece):
     """Defines a Knight chess piece for a chess game"""

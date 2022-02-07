@@ -1,8 +1,3 @@
-#
-# Alison Soong
-#
-# Button.py
-#
 
 from graphics import *
 
