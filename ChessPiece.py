@@ -1,6 +1,7 @@
 # A general chess piece
+from graphics import Image, Point
 
-class ChessPiece:
+class ChessPiece(Image):
     """Defines a general chess piece for a chess game"""
 
     def __init__(self, color: bool, pos: tuple):
@@ -10,16 +11,19 @@ class ChessPiece:
             color (bool): True if white, False if black
             pos (tuple): initial position of the pawn
         """
-
+        super().__init__(Point(*pos), f"images/{self.__class__.__name__}{'W' if color else 'B'}.png")
         self._color = color
         self._startPos = pos
-        self.rules = [] # TODO: lambda or list
+        self.rules = []
     
     def copy(self):
         return type(self)(color=self._color, pos=self._startPos)
     
     def __repr__(self):
         return f"{self.__class__.__name__}({self._color}, {self._startPos})"
+
+    def __str__(self):
+        return f"{'White' if self._color else 'Black'} {self.__class__.__name__}"
     
     def __hash__(self):
         return hash(repr(self))
