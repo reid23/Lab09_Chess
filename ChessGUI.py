@@ -1,6 +1,13 @@
 from graphics import *
+from numpy import piecewise
 from ChessBoard import Board
 from Button import Button
+from Pawn import Pawn
+from Queen import Queen
+from Knight import Knight
+from King import King
+from Bishop import Bishop
+from Rook import Rook
 
 class ChessGUI:
     """GUI for a chess game"""
@@ -16,10 +23,11 @@ class ChessGUI:
         self.win.setBackground("white")
         self.win.setCoords(-10,-30,150,90)
         self.chessBoard = Board()
-        board = self.chessBoard.getGameState('all') # TODO: change later
+        self.chessBoard.reset()
+        self.board = self.chessBoard.getGameState('all') # TODO: change later
         for x in range(8):
             for y in range(8):
-                board[x][y][0].draw(self.win)
+                self.board[x][y][0].draw(self.win)
         self.quitButton = Button(Point(115,-8), 50, 8, "Quit", self.win)
         self.quitButton.activate()
         self.replayButton = Button(Point(115,-20), 50, 8, "Reset", self.win)
@@ -42,15 +50,25 @@ class ChessGUI:
         self.prompt = Text(Point(40,-14), "Prompt goes here")
         self.prompt.draw(self.win)
 
-        self.win.update()
+        self.updateWin()
 
         self.done = False
+
+        self.updatePrompt("ghello there my name is alison this is a test because i don't know what else to say hello hello everything is awesome no i'm not qutoing a movieeee")
+        self.drawStartBoard()
+        self.updateWin()
 
     
     def drawStartBoard(self):
         """Draws the starting board, resets the game
         """
         # self.chessBoard.reset() # TODO: NEED TO CREATE A RESET CHESS BOARD METHOD
+        self.chessBoard.reset()
+        for x in range(8):
+            for y in range(8):
+                piece = self.chessBoard.getThing(x, y, 2)
+                if piece != None:
+                    piece.draw(self.win)
 
 
     def updatePrompt(self, msg : str) -> None:
@@ -74,10 +92,14 @@ class ChessGUI:
             cur += 70
         s+=msg[prev:]
         self.prompt.setText(s) # TODO: fix length of message, needs to wrap :)
+        self.prevState = self.chessBoard.getGameState('all')
     
 
     def updateWin(self):
+        # self.drawDiff(self.chessBoard - self.prevState)
         self.win.update()
+        
+        
 
     def update(self):
         pt = self.win.getMouse()
@@ -96,14 +118,38 @@ class ChessGUI:
             [bool]: true if done, false if not
         """
         return self.done
+    
+    # def drawDiff(self, changes : list(tuple)):
+    #     for change in changes:
+    #         x = change[0]
+    #         y = change[1]
+    #         self.prevState.putThing()
+    #         r = self.board[x][y][0]
 
-        
+    #         # change color of tile
+    #         if self.chessBoard[x][y][0] and not self.prevState[x][y][1]:
+    #             # now lit but wasn't lit before
+    #             r.setFill(color_rgb(149, 222, 146))
+    #         elif not self.chessBoard[x][y][1] and self.prevState[x][y][1]:
+    #             if x%2 == 0 and y%2 == 0 or x%2 != 0 and y%2 != 0:
+    #                 r.setFill('grey')
+    #             else:
+    #                 r.setFill(color_rgb(245, 245, 242))
 
+    #         # change piece??
+    #         if self.chessBoard[x][y][2] != self.prevState[x][y][2]:
+    #             #undraw that piece
+    #             self.prevState[x][y][2].undraw()
+    #             if self.chessBoard[x][y][2] != None:
+    #                 self.chessBoard[x][y][2].draw()
+                    
+
+    #     # change the prev state to cur state
+    #     self.prevState = self.board
 
 if __name__ == '__main__':
-    b = Board(None)
-    cGUI = ChessGUI(b)
-    cGUI.updatePrompt("ghello there my name is alison this is a test because i don't know what else to say hello hello everything is awesome no i'm not qutoing a movieeee")
+    cGUI = ChessGUI()
+    cGUI.updatePrompt("hello there my name is alison this is a test because i don't know what else to say hello hello everything is awesome no i'm not qutoing a movieeee")
     cGUI.updateWin()
 
     while not cGUI.isDone():

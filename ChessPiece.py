@@ -11,10 +11,11 @@ class ChessPiece(Image):
             color (bool): True if white, False if black
             pos (tuple): initial position of the pawn
         """
-        super().__init__(Point(*pos), f"images/{self.__class__.__name__}{'W' if color else 'B'}.png")
+        super().__init__(Point(pos[0]*10+5, pos[1]*10+5), f"images/{self.__class__.__name__}{'W' if color else 'B'}.png")
         self._color = color
         self._startPos = pos
         self.rules = []
+        self.image = 0
     
     def copy(self):
         return type(self)(color=self._color, pos=self._startPos)
@@ -29,7 +30,7 @@ class ChessPiece(Image):
         return hash(repr(self))
     
     def __eq__(self, other):
-        return self._color==other.color and isinstance(other, type(self))
+        return isinstance(other, type(self)) and self._color==other.color
     
     @property
     def startPos(self):
@@ -112,4 +113,3 @@ class ChessPiece(Image):
             move (tuple (a, b) where a and b are int): Represents a possible move
         """
         return 0 <= move[0] <= 7 and 0 <= move[1] <= 7 
-

@@ -3,7 +3,7 @@ from ChessPiece import ChessPiece
 
 class Bishop(ChessPiece):
     def __init__(self, color, pos=tuple):
-        super().__init__(color, (4, 1) if color else (3, 7))
+        super().__init__(color, pos)
 
         self.rules=(
             tuple((i, i) for i in range(8)), 

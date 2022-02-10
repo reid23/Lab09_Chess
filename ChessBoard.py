@@ -1,4 +1,4 @@
-from graphics import Rectangle, Point
+from graphics import Rectangle, Point, color_rgb
 import numpy as np #only needed for test func
 import os
 from Pawn import Pawn
@@ -64,7 +64,7 @@ class Board:
             }
         self.n=0
         self.iterReturns='squares'
-        # self.pieces=set(pieces)
+        self.pieces=set(pieces)
         self.descriminator=lambda x: True
         if board!=None:
             self.gameState=board
@@ -77,6 +77,8 @@ class Board:
                 r.setOutline("white")
                 if x%2 == 0 and y%2 == 0 or x%2 != 0 and y%2 != 0:
                     r.setFill('grey')
+                else:
+                    r.setFill(color_rgb(245, 245, 242))
                 self.putThing(r, (x, y), thingType='tile')
                 self.putThing(False, (x, y), thingType='lit') #white true, black false
                 #the bool() part just does xor(x is even, y is even)
@@ -89,13 +91,15 @@ class Board:
     
     def reset(self):
         self.gameState = self._empty(8,8,3)
-        # for p in pieces:
-            # self.putThing(p, p.startPos) #add this to pieces
+        for p in self.pieces:
+            self.putThing(p, p.startPos) #add this to pieces
         for x, y in [[x, y] for x in range(8) for y in range(8)]:
             r = Rectangle(Point(10*x,10*y), Point(10*(x+1),10*(y+1)))
             r.setOutline("white")
             if x%2 == 0 and y%2 == 0 or x%2 != 0 and y%2 != 0:
                 r.setFill('grey')
+            else:
+                r.setFill(color_rgb(245, 245, 242))
             self.putThing(r, (x, y), thingType='tile')
             self.putThing(False, (x, y), thingType='lit') #white true, black false
 
@@ -280,11 +284,11 @@ class Board:
     
     def getThing(self, x, y, z=None):
         if z==0:
-            return self.gameState[x][y][z].clone()
+            return self.gameState[x][y][z]
         elif z==1:
             return self.gameState[x][y][z]
         elif z==2:
-            return self.gameState[x][y][z].copy()
+            return self.gameState[x][y][z]
         return self.gameState[x][y].copy()
 
     def __call__(self, things='all', descriminator=None):

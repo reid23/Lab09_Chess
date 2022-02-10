@@ -1,10 +1,11 @@
 # King Chess Piece
 #%%
 from ChessPiece import ChessPiece
+from graphics import *
 #%%
 class King(ChessPiece):
     def __init__(self, color, pos='dont pass'):
-        super().__init__(color, (4, 1) if color else (3, 7))
+        super().__init__(color, pos)
         self.rules=((1, 0), (1,  1),
                     (0, 1), (-1, 1),
                     (-1,0), (-1,-1),

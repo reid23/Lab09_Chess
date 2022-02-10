@@ -57,13 +57,21 @@ class Queen (ChessPiece):
         
         return moves
 
+
+
 def main():
     # testing Pawn
+    win = GraphWin("testing", 800,700)
+
     q1 = Queen(True, (1,1))
+    q1.draw(win)
+
     print(q1.calculatePossibleMoves(True, (2,2)))
     
 
-if __name__ == "__main__": main()
+if __name__ == "__main__": 
+    from graphics import * 
+    main()
 
 
 
