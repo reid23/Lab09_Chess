@@ -13,15 +13,15 @@ class ChessPiece(Image):
         """
         super().__init__(Point(pos[0]*10+5, pos[1]*10+5), f"images/{self.__class__.__name__}{'W' if color else 'B'}.png")
         self._color = color
-        self._startPos = pos
+        self._curPos = pos
         self.rules = []
         self.image = 0
     
     def copy(self):
-        return type(self)(color=self._color, pos=self._startPos)
+        return type(self)(color=self._color, pos=self._curPos)
     
     def __repr__(self):
-        return f"{self.__class__.__name__}({self._color}, {self._startPos})"
+        return f"{self.__class__.__name__}({self._color}, {self._curPos})"
 
     def __str__(self):
         return f"{'White' if self._color else 'Black'} {self.__class__.__name__}"
@@ -33,9 +33,9 @@ class ChessPiece(Image):
         return isinstance(other, type(self)) and self._color==other.color
     
     @property
-    def startPos(self):
+    def curPos(self):
         """shouldn't be used directly, just enables doing ChessPiece.startPos to get the position without violating encapsulation (ie this is read-only)"""
-        return self._startPos
+        return self._curPos
     
     @property
     def color(self):

@@ -4,8 +4,8 @@ from ChessGUI import ChessGUI
 
 
 def main():
-    gamee = ChessGUI()
-    while not gamee.isDone():
-        gamee.update()
+    game = ChessGUI()
+    while not game.isDone():
+        game.update()
 
 if __name__ == '__main__': main()

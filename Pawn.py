@@ -2,7 +2,7 @@
 from ChessPiece import ChessPiece # remove later
 
 class Pawn(ChessPiece):
-    def __init__(self, color, pos):
+    def __init__(self, color, pos, startPos=(-1,-1)):
         """Creates a new Pawn
 
         Args:
@@ -14,6 +14,7 @@ class Pawn(ChessPiece):
             self.rules = [(0,1),(1,1),(-1,1),(0,2)]
         else:
             self.rules = [(0,-1),(1,-1),(-1,-1),(0,-2)]
+        self.startPos = startPos
              
     def calculatePossibleMoves(self, gameState, pos):
         """Calculates all the possible moves given the game state. Returns a list of tuples representing possible moves.

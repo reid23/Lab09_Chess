@@ -17,30 +17,30 @@ class Board:
             board (list): a pre-set board, if needed.  Don't pass.
         """
         if not pieces:
-            pieces={
-                Pawn(True, (0,1)),
-                Pawn(False, (0,6)),
+            self.pieces={
+                Pawn(True, (0,1), startPos=(0,1)),
+                Pawn(False, (0,6), startPos=(0,6)),
 
-                Pawn(True, (1,1)),
-                Pawn(False, (1,6)),
+                Pawn(True, (1,1), startPos=(1,1)),
+                Pawn(False, (1,6), startPos=(1,6)),
 
-                Pawn(True, (2,1)),
-                Pawn(False, (2,6)),
+                Pawn(True, (2,1), startPos=(2,1)),
+                Pawn(False, (2,6), startPos=(2,6)),
 
-                Pawn(True, (3,1)),
-                Pawn(False, (3,6)),
+                Pawn(True, (3,1), startPos=(3,1)),
+                Pawn(False, (3,6), startPos=(3,6)),
 
-                Pawn(True, (4,1)),
-                Pawn(False, (4,6)),
+                Pawn(True, (4,1), startPos=(4,1)),
+                Pawn(False, (4,6), startPos=(4,6)),
 
-                Pawn(True, (5,1)),
-                Pawn(False, (5,6)),
+                Pawn(True, (5,1), startPos=(5,1)),
+                Pawn(False, (5,6), startPos=(5,6)),
 
-                Pawn(True, (6,1)),
-                Pawn(False, (6,6)),
+                Pawn(True, (6,1), startPos=(6,1)),
+                Pawn(False, (6,6), startPos=(6,6)),
 
-                Pawn(True, (7,1)),
-                Pawn(False, (7,6)),
+                Pawn(True, (7,1), startPos=(7,1)),
+                Pawn(False, (7,6), startPos=(7,6)),
 
                 Knight(True, (1,0)),
                 Knight(True, (6,0)),
@@ -62,9 +62,9 @@ class Board:
                 Queen(True, (3,0)),
                 Queen(False, (3,7)),
             }
+            self._initPieces = self.pieces.copy()
         self.n=0
         self.iterReturns='squares'
-        self.pieces=set(pieces)
         self.descriminator=lambda x: True
         if board!=None:
             self.gameState=board
@@ -87,12 +87,21 @@ class Board:
         return self.gameState==other.getGameState()
 
     def copy(self):
-        return Board(board=self.gameState)
+        return Board(self.getGameState('pieces'),board=self.getGameState('all'))
     
     def reset(self):
+        for x, y in [[x, y] for x in range(8) for y in range(8)]:
+            if self.gameState[x][y][0] != None:
+                self.gameState[x][y][0].undraw()
+            if self.gameState[x][y][2] != None:
+                self.gameState[x][y][2].undraw()
+            
         self.gameState = self._empty(8,8,3)
-        for p in self.pieces:
-            self.putThing(p, p.startPos) #add this to pieces
+        for p in self._initPieces.copy():
+            self.putThing(p, p.curPos) #add this to pieces
+            print(p, p.curPos,self.gameState[p.curPos[0]][p.curPos[1]][2])
+
+        print("+++++++++++++")
         for x, y in [[x, y] for x in range(8) for y in range(8)]:
             r = Rectangle(Point(10*x,10*y), Point(10*(x+1),10*(y+1)))
             r.setOutline("white")
@@ -127,7 +136,7 @@ class Board:
             case 'piecesOnBoard':
                 return self.gameState[2].copy()
             case 'pieces':
-                return self.pieces.copy()
+                return self.pieces
 
 
 
@@ -191,8 +200,10 @@ class Board:
         return output
 
     def lightUpSquares(self, clickedSquare: tuple):
-        if self.gameState[clickedSquare[0]][clickedSquare[1]][2]!=None:
-            rule=lambda x: x in self.gameState[clickedSquare[0]][clickedSquare[1]][2].calculatePossibleMoves(self.getGameState('pieces'))
+        curX = clickedSquare[0]
+        curY = clickedSquare[1]
+        if self.gameState[curX][curY][2]!=None:
+            rule=lambda x: x in self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('pieces'), (curX, curY))
             self.putThingRule(True, rule, thingType='lit')
         
     def __sub__(self, other):
@@ -214,7 +225,7 @@ class Board:
         for i in range(8):
             for j in range(8):
                 for k in range(1,3):
-                    if not other.getThing(i, j, k)==self.gameState[i][j][k]:
+                    if other.getThing(i, j, k) != self.gameState[i][j][k]:
                         output.append(((i, j, k), self.gameState[i][j][k]))
         return tuple(output)
 
@@ -228,11 +239,11 @@ class Board:
         """
         match thingType:
             case 'tile':
-                self.gameState[position[1]][position[0]][0]=thing
+                self.gameState[position[0]][position[1]][0]=thing
             case 'lit':
-                self.gameState[position[1]][position[0]][1]=thing
+                self.gameState[position[0]][position[1]][1]=thing
             case 'piece':
-                self.gameState[position[1]][position[0]][2]=thing
+                self.gameState[position[0]][position[1]][2]=thing
                 self.pieces.add(thing)
 
 
