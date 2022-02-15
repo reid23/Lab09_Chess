@@ -119,9 +119,9 @@ class ChessGUI:
     
 
     def updateWin(self):
-        for i in range(7):
-            for j in range(7):
-                print(self.prevState.getThing(i,j,1),end=" ")
+        for j in range(7):
+            for i in range(7):
+                print(self.prevState.getThing(7-i,7-j,1),end=" ")
             print()
         self.drawDiff(self.prevState - self.chessBoard)
         # print(self.prevState - self.chessBoard)
@@ -131,19 +131,19 @@ class ChessGUI:
     def coordClicked(self, pt):
         # returns tuple of grid cooord that has been pressed
         # TODO IMPLEMENT
-        print("BLUB DO THIS LDKFS:DLKFJ:LSDKFJ")
         curX = pt.getX()
         curY = pt.getY()
         if (curX < 0 or curY < 0 or curX > 80 or curY > 80):
             return False
         curX = int(curX/10)
         curY = int(curY/10)
+        print("------",curX,curY)
         
-        for x in range(8):
-            for y in range(8):
-                if self.chessBoard.getThing(x,y,2).color == self.curPlayer:
-                    self.chessBoard.lightUpSquares((x,y))
-                    return True
+        if self.chessBoard.getThing(curX,curY,2) == None:
+            return False
+        if self.chessBoard.getThing(curX,curY,2).color == self.curPlayer:
+            self.chessBoard.lightUpSquares((curX,curY))
+            return True
         return False
 
 
@@ -165,6 +165,10 @@ class ChessGUI:
             self.resetGame()
 
         if self.coordClicked(pt):
+            # next step of turn is to choose square... idk just a progression of steps for turn
+            # 1) select piece to move
+            # 2) select place to move that piece
+            # IF THE COORD CLICKED IS NOT YOUR PIECE, DO NOT USE IT
             self.hasSelected = True
         
         self.updateWin()
@@ -188,10 +192,9 @@ class ChessGUI:
 
             if (change[0][2] == 1):
                 # curTileOn = self.chessBoard.getThing(x,y,1)
-                curTile = self.chessBoard.getThing(x,y,0)
                 prevTile = self.prevState.getThing(x,y,0)
-                prevTile.undraw()
-                curTile.undraw()
+                self.chessBoard.putThing(prevTile, (x,y),'tile')
+                curTile = self.chessBoard.getThing(x,y,0)
 
                 if change[1]:
                     curTile.setFill(color_rgb(149, 222, 146))
@@ -200,8 +203,6 @@ class ChessGUI:
                         curTile.setFill('grey')
                     else:
                         curTile.setFill(color_rgb(245, 245, 242))
-
-                curTile.draw(self.win)
                 
 
             if (change[0][2] == 2):

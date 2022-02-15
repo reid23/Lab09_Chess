@@ -34,6 +34,24 @@ class Bishop(ChessPiece):
                 del nxs[counter]
                 continue
             
+        def getAllMoves(self, gameState, pos):
+            """Returns all possible moves
+
+            Args:
+                gameState: the current game state, a list of shape (8, 8, 3)
+                pos (tuble): current position
+
+            Returns:
+                list of moves (filters out of bounds)
+            """
+            moves = []
+            for rel in self.rules:
+                move = (pos[0]+rel[0], pos[1]+rel[1]) 
+                # if move is within bounds
+                if self.withinBounds(move):
+                    moves.append(move)
+
+            return moves
         
         
         return list(set(tuple(nxs)+tuple(nys)+tuple(pxs)+tuple(pys))) #make tuple to make hashable, make set and back to remove duplicates

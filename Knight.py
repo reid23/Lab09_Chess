@@ -26,6 +26,8 @@ class Knight (ChessPiece):
         for rel in self.rules:
             move = (pos[0]+rel[0], pos[1]+rel[1]) 
             print(move)
+            if gameState[move[0]][move[1]][2] == None:
+                    continue
             if not self.withinBounds(move): # if not within bounds, ignore move
                 continue
             color = gameState[move[0]][move[1]][2]

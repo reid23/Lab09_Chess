@@ -15,13 +15,32 @@ class King(ChessPiece):
         moves=list(self.rules)
         for counter, mov in enumerate(moves):
             if isinstance(gameState[mov[0]][mov[1]][2], ChessPiece):
-                if gameState[mov[0]][mov[1]][2].color==self.color or not self.checkCheck(gameState, pos, mov) or not self.withinBounds(map(sum,zip(pos, mov))):
+                if gameState[mov[0]][mov[1]][2].color==self.color or not self.checkCheck(gameState, pos, mov, self.color) or not self.withinBounds(map(sum,zip(pos, mov))):
                     del moves[counter]
             else:
                 if not self.checkCheck(gameState, pos, mov) or not self.withinBounds(self._toGlobal(pos, mov)):
                     del moves[counter]
         
         return moves
+
+    def getAllMoves(self, gameState, pos):
+            """Returns all possible moves
+
+            Args:
+                gameState: the current game state, a list of shape (8, 8, 3)
+                pos (tuble): current position
+
+            Returns:
+                list of moves (filters out of bounds)
+            """
+            moves = []
+            for rel in self.rules:
+                move = (pos[0]+rel[0], pos[1]+rel[1]) 
+                # if move is within bounds
+                if self.withinBounds(move):
+                    moves.append(move)
+
+            return moves
 
 
 # %%

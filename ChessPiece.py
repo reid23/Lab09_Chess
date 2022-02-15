@@ -82,7 +82,7 @@ class ChessPiece(Image):
         """
 
         # will bring the below back once everything is merged
-        newGameState = gameState.getGameState('pieces') # implemented~
+        newGameState = gameState.copy() # implemented~
         # replace with moved chess piece
         newGameState[move[0]][move[1]][2] = newGameState[pos[0]][pos[1]][2]
         newGameState[pos[0]][pos[1]][2] = None

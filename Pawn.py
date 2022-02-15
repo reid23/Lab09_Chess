@@ -27,7 +27,8 @@ class Pawn(ChessPiece):
         moves = []
         for rel in self.rules:
             move = (pos[0]+rel[0], pos[1]+rel[1]) 
-
+            if gameState[move[0]][move[1]][2] == None:
+                continue
             color = gameState[move[0]][move[1]][2].color
             isEmptyOrDiffColor = color == None or color != self.color
             # if both withiin bounds and overtakes an empty or diifferent color piece
