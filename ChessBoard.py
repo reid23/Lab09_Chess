@@ -87,7 +87,7 @@ class Board:
         return self.gameState==other.getGameState()
 
     def copy(self):
-        return Board(self.getGameState('pieces'),board=self.getGameState('all'))
+        return Board(self.getGameState('pieces'), board=self.getGameState('all'))
     
     def reset(self):
         for x, y in [[x, y] for x in range(8) for y in range(8)]:
@@ -203,7 +203,7 @@ class Board:
         curX = clickedSquare[0]
         curY = clickedSquare[1]
         if self.gameState[curX][curY][2]!=None:
-            rule=lambda x: x in self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('pieces'), (curX, curY))
+            rule=lambda x: x in self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('all'), (curX, curY))
             self.putThingRule(True, rule, thingType='lit')
         
     def __sub__(self, other):
