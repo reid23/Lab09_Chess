@@ -30,11 +30,11 @@ class ChessPiece(Image):
         return hash(repr(self))
     
     def __eq__(self, other):
-        return isinstance(other, type(self)) and self._color==other.color
+        return isinstance(other, type(self)) and self._color==other.color and self._curPos==other.curPos
     
     @property
     def curPos(self):
-        """shouldn't be used directly, just enables doing ChessPiece.startPos to get the position without violating encapsulation (ie this is read-only)"""
+        """shouldn't be used directly, just enables doing ChessPiece.curPos to get the position without violating encapsulation (ie this is read-only)"""
         return self._curPos
     
     @property
@@ -70,7 +70,7 @@ class ChessPiece(Image):
         """
         return []
 
-    # TODO: MOVE INTO CHESS BOARD BC CIRCULAR IMPORT :>
+    
     def checkCheck(self, gameState: list, pos: tuple, move: tuple, color: bool) -> bool:
         """Verifies if move will cause a checkmate. Returns True if induces a checkmate, False if not.
 

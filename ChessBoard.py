@@ -89,6 +89,20 @@ class Board:
     def copy(self):
         return Board(self.getGameState('pieces'), board=self.getGameState('all'))
     
+    def checkCheck(self, piece, mov):
+        """checks if a $piece can do a $movement without creating a check
+
+        Args:
+            piece (piece object): the piece to check
+            movement (tuple): the RELATIVE movement
+        """
+        pos = self.unPutThing(piece, actuallyRemove=False)
+        pos = (pos[0]+mov[0], pos[1]+mov[1]) #convert to absolute
+
+        newBoard = self.copy
+
+
+
     def reset(self):
         for x, y in [[x, y] for x in range(8) for y in range(8)]:
             if self.gameState[x][y][0] != None:
