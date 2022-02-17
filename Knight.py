@@ -25,19 +25,16 @@ class Knight (ChessPiece):
         moves = []
         for rel in self.rules:
             move = (pos[0]+rel[0], pos[1]+rel[1]) 
-            print(move)
-            if gameState[move[0]][move[1]][2] == None:
-                    continue
-            if not self.withinBounds(move): # if not within bounds, ignore move
-                continue
-            color = gameState[move[0]][move[1]][2]
-            isEmptyOrDiffColor = color == None or color != self.color
-            # if doesn't overtake an empty or diifferent color piece
-            if not isEmptyOrDiffColor:
-                continue
-            # if move does not cause a checkmate
-            if (not self.checkCheck(gameState, pos, move, self.color)):
-                moves.append(move)
+            # if both withiin bounds and overtakes an empty or diifferent color piece
+            if self.withinBounds(move):
+                if gameState[move[0]][move[1]][2] != None:
+                    color = gameState[move[0]][move[1]][2].color
+                    if color == self.color:
+                        continue # just break
+
+                # if move does not cause a checkmate
+                if (not self.checkCheck(gameState, pos, move, self.color)):
+                    moves.append(move)
         
         return moves
 
@@ -59,6 +56,9 @@ class Knight (ChessPiece):
                 moves.append(move)
 
         return moves
+
+    def getType(self) -> str:
+        return "Knight"
 
 def main():
     # testing Pawn

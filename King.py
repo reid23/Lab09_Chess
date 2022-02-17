@@ -15,10 +15,10 @@ class King(ChessPiece):
         moves=list(self.rules)
         for counter, mov in enumerate(moves):
             if isinstance(gameState[mov[0]][mov[1]][2], ChessPiece):
-                if gameState[mov[0]][mov[1]][2].color==self.color or not self.checkCheck(gameState, pos, mov, self.color) or not self.withinBounds(map(sum,zip(pos, mov))):
+                if gameState[mov[0]][mov[1]][2].color==self.color or not self.checkCheck(gameState, pos, mov, self.color) or not self.withinBounds((pos[0]+mov[0], pos[1]+pos[1])):
                     del moves[counter]
             else:
-                if not self.checkCheck(gameState, pos, mov) or not self.withinBounds(self._toGlobal(pos, mov)):
+                if not self.checkCheck(gameState, pos, mov, self.color) or not self.withinBounds(self._toGlobal(pos, mov)):
                     del moves[counter]
         
         return moves
@@ -41,6 +41,9 @@ class King(ChessPiece):
                     moves.append(move)
 
             return moves
+
+    def getType(self) -> str:
+        return "King"
 
 
 # %%

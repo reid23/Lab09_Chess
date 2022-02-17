@@ -26,11 +26,13 @@ class Queen (ChessPiece):
         for rel in self.rules:
             for i in range(1,8): # as far as the Queen wants bc powerful!
                 move = (pos[0]+rel[0]*i, pos[1]+rel[1]*i) 
-
-                color = gameState[move[0]][move[1]][2].color
-                isEmptyOrDiffColor = color == None or color != self.color
                 # if both withiin bounds and overtakes an empty or diifferent color piece
-                if self.withinBounds(move) and isEmptyOrDiffColor:
+                if self.withinBounds(move):
+                    if gameState[move[0]][move[1]][2] != None:
+                        color = gameState[move[0]][move[1]][2].color
+                        if color == self.color:
+                            break # no need to continue in this direction
+                    
                     # if move does not cause a checkmate
                     if (not self.checkCheck(gameState, pos, move, self.color)):
                         moves.append(move)
@@ -56,6 +58,9 @@ class Queen (ChessPiece):
                     moves.append(move)
         
         return moves
+
+    def getType(self) -> str:
+        return "Queen"
 
 
 

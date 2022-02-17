@@ -58,3 +58,6 @@ class Rook(ChessPiece):
                         moves.append(move)
 
             return moves
+
+    def getType(self) -> str:
+        return "Rook"
