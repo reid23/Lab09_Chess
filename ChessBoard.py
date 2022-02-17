@@ -89,17 +89,33 @@ class Board:
     def copy(self):
         return Board(self.getGameState('pieces'), board=self.getGameState('all'))
     
-    def checkCheck(self, piece, mov):
+    def checkCheckGivenMov(self, piece, mov):
         """checks if a $piece can do a $movement without creating a check
 
         Args:
             piece (piece object): the piece to check
             movement (tuple): the RELATIVE movement
         """
-        pos = self.unPutThing(piece, actuallyRemove=False)
+        newBoard = self.copy()
+        pos = newBoard.unPutThing(piece, actuallyRemove=True)
         pos = (pos[0]+mov[0], pos[1]+mov[1]) #convert to absolute
+        newBoard.putThing(piece, pos)
+        newBoard.checkCheck(not piece.color)
 
-        newBoard = self.copy
+    def checkCheck(self, colorToCheck: bool) -> bool:
+        kingPos = (0,0)
+        for i in self.__call__(thing='piecesInBoard'):
+            match i:
+                case King(color=colorToCheck, pos=pos):
+                    kingPos=pos
+                case _:
+                    pass
+        for i in self.__call__(thing='piecesInBoard', descriminator = lambda x: (not x.color)==colorToCheck):
+            if kingPos in i.getAllMoves(self.gameState, kingPos):
+                return False
+            
+
+
 
 
 
