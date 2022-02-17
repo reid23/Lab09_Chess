@@ -59,7 +59,6 @@ class Rook(ChessPiece):
             #   self.checkCheck
             #   within bounds
 
-<<<<<<< HEAD
             for moves in [nxs, nys, pxs, pys]:
                 for counter, mov in enumerate(moves):
                     if not self.withinBounds(self._toGlobal(pos, mov)): #if the move is outside the board...
@@ -74,17 +73,6 @@ class Rook(ChessPiece):
                         del nxs[counter]
                         continue
             
-=======
-            for counter, mov in enumerate(nxs):
-                if not self.withinBounds(self._toGlobal(pos, mov)): #if the move is outside the board...
-                    del nxs[counter+1:]
-                    break
-                if isinstance(gameState[mov[0]][mov[1]][2], ChessPiece):
-                    del nxs[counter+1:] #remove all moves blocked by this piece
-                    if gameState[mov[0]][mov[1]][2].color==self.color:
-                        del nxs[counter] #delete this space too if it's the same color as me or if it would cause a checkmate
-                    break #then break, no more deciding to do for this section
->>>>>>> 0c5069045e592500dbcba4b3f4b1fd5c3ddc24e5
                 
             return list(set(tuple(nxs)+tuple(nys)+tuple(pxs)+tuple(pys)))
 

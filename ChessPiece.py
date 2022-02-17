@@ -13,10 +13,16 @@ class ChessPiece(Image):
         """
         super().__init__(Point(pos[0]*10+5, pos[1]*10+5), f"images/{self.__class__.__name__}{'W' if color else 'B'}.png")
         self._color = color
-        self._curPos = pos
         self.rules = []
         self.image = 0
-    
+
+    def _move(self, x, y, absolute=True):
+        if absolute:
+            dx, dy = x-self.anchor.getX(), y-self.anchor.getY()
+        else:
+            dx, dy = x, y
+        self.anchor.move(dx, dy)
+
     def copy(self):
         return type(self)(color=self._color, pos=self._curPos)
     
@@ -35,7 +41,7 @@ class ChessPiece(Image):
     @property
     def curPos(self):
         """shouldn't be used directly, just enables doing ChessPiece.curPos to get the position without violating encapsulation (ie this is read-only)"""
-        return self._curPos
+        return (self.anchor.getX(), self.anchor.getY())
     
     @property
     def color(self):
