@@ -78,7 +78,7 @@ class ChessPiece(Image):
             gameState (list): a 8x8x3 matrix [rectangle object, litUp, chessPiece object]
             pos (tuple (a, b) where a and b are int): Represents a possible position after a move
             move (tuple (a, b) where a and b are int): Represents a possible position after a move
-            color (booll): the color of the current piece being moved. If own king is being 
+            color (bool): the color of the current piece being moved. If own king is being 
         """
 
         # will bring the below back once everything is merged
@@ -86,15 +86,23 @@ class ChessPiece(Image):
         # replace with moved chess piece
         newGameState[move[0]][move[1]][2] = newGameState[pos[0]][pos[1]][2]
         newGameState[pos[0]][pos[1]][2] = None
+        if newGameState[move[0]][move[1]][2] == None:
+            return False
         curColor = newGameState[move[0]][move[1]][2].color
         
         for x in range(8):
             for y in range(8):
+                if newGameState[x][y][2] == None or newGameState[x][y][2].color == color:
+                    continue #don't care about same color piece loL
                 for move in newGameState[x][y][2].getAllMoves(gameState, (x,y)): # filtered for bounds already
+                    if newGameState[move[0]][move[1]][2] == None:
+                        continue
                     nextColor = newGameState[move[0]][move[1]][2].color
+                    if nextColor == None:
+                        continue
                     # make sure that own king will not be in a checkmate
-                    # if isinstance(newGameState[move[0]][move[1]][2].isInstance(), King) and nextColor == color:
-                        # return True
+                    if newGameState[move[0]][move[1]][2].getType() == "King" and nextColor == color:
+                        return True
         
         return False
 
@@ -113,3 +121,11 @@ class ChessPiece(Image):
             move (tuple (a, b) where a and b are int): Represents a possible move
         """
         return 0 <= move[0] <= 7 and 0 <= move[1] <= 7 
+    
+    def getType(self) -> str:
+        """[summary]
+
+        Returns:
+            str: string of thing
+        """
+        return ""

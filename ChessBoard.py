@@ -232,9 +232,16 @@ class Board:
     def lightUpSquares(self, clickedSquare: tuple):
         curX = clickedSquare[0]
         curY = clickedSquare[1]
-        if self.gameState[curX][curY][2]!=None:
-            rule=lambda x: x in self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('all'), (curX, curY))
-            self.putThingRule(True, rule, thingType='lit')
+        print("=============",self.gameState[curX][curY][2])
+        if self.gameState[curX][curY][2] == None:
+            return
+        # rule=lambda x: x in self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('all'), (curX, curY))
+        # self.putThingRule(True, rule, thingType='lit')
+        moves = self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('all'), (curX, curY))
+        print(moves)
+        for move in moves:
+            self.putThing(True, move, 'lit')
+
         
     def __sub__(self, other):
         """subtraction between board classes.  don't call directly, do changes=oldBoard-newBoard

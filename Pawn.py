@@ -11,9 +11,9 @@ class Pawn(ChessPiece):
         """
         super().__init__(color, pos)
         if color: # white
-            self.rules = [(0,1),(1,1),(-1,1),(0,2)]
+            self.rules = [(0,1),(0,2)]
         else:
-            self.rules = [(0,-1),(1,-1),(-1,-1),(0,-2)]
+            self.rules = [(0,-1),(0,-2)]
         self.startPos = startPos
              
     def calculatePossibleMoves(self, gameState, pos):
@@ -27,13 +27,14 @@ class Pawn(ChessPiece):
         moves = []
         for rel in self.rules:
             move = (pos[0]+rel[0], pos[1]+rel[1]) 
-            if gameState[move[0]][move[1]][2] == None:
-                continue
-            color = gameState[move[0]][move[1]][2].color
-            isEmptyOrDiffColor = color == None or color != self.color
             # if both withiin bounds and overtakes an empty or diifferent color piece
-            if self.withinBounds(move) and isEmptyOrDiffColor:
-                # if move does not cause a checkmate
+            if self.withinBounds(move):
+                if gameState[move[0]][move[1]][2] != None:
+                    color = gameState[move[0]][move[1]][2].color
+                    if color == self.color: # same color, just break
+                        continue
+                    
+                # if move does not cause a checkmate and is not something of the same color
                 if (not self.checkCheck(gameState, pos, move, self.color)):
                     # if special move
                     if rel == (0,2) or rel == (0,-2):
@@ -75,6 +76,9 @@ class Pawn(ChessPiece):
                     moves.append(move)
         
         return moves
+
+    def getType(self) -> str:
+        return "Pawn"
     
 
 def main():
