@@ -1,3 +1,4 @@
+from ChessPiece import ChessPiece
 class noPiece(ChessPiece):
     def __init__(self, *args, **kwargs):
         super().__init__(None, (420, 420))
