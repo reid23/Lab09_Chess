@@ -88,6 +88,12 @@ class Board:
     def __eq__(self, other):
         return self.gameState==other.getGameState()
 
+    def updatePeicePoses(self):
+        for i in range(8):
+            for j in range(8):
+                if not self.getThing(i, j, 2).curPos == (i, j):
+                    self.getThing(i, j, 2).move(i, j)
+
     def copy(self):
         return Board(self.getGameState('piecesOnBoard'), board=self.getGameState('allCopy'))
     

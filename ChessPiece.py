@@ -17,7 +17,14 @@ class ChessPiece(Image):
         self._startPos = startPos
         self.rules = []
         self.image = 0
-    
+
+    def _move(self, x, y, absolute=True):
+        if absolute:
+            dx, dy = x-self.anchor.getX(), y-self.anchor.getY()
+        else:
+            dx, dy = x, y
+        self.anchor.move(dx, dy)
+
     def copy(self):
         return type(self)(color=self._color, pos=self._curPos, startPos=self._startPos)
     
@@ -40,7 +47,7 @@ class ChessPiece(Image):
     @property
     def curPos(self):
         """shouldn't be used directly, just enables doing ChessPiece.curPos to get the position without violating encapsulation (ie this is read-only)"""
-        return self._curPos
+        return (self.anchor.getX(), self.anchor.getY())
     
     @property
     def color(self):
