@@ -41,13 +41,14 @@ class ChessPiece(Image):
         return isinstance(other, type(self)) and self._color==other.color and self._curPos==other.curPos
     
     def setPos(self, oldPos, newPos):
-        self._curPos = newPos
-        self._move((newPos[0]-oldPos[0])*10, (newPos[1]-oldPos[1])*10)
+        self._curPos = (int(newPos[0]), int(newPos[1]))
+        print("))))))))))))))))))))", newPos, "(((((((((((((((", oldPos)
+        self._move((newPos[0]-oldPos[0])*10, (newPos[1]-oldPos[1])*10, False)
     
     @property
     def curPos(self):
         """shouldn't be used directly, just enables doing ChessPiece.curPos to get the position without violating encapsulation (ie this is read-only)"""
-        return (self.anchor.getX(), self.anchor.getY())
+        return self._curPos
     
     @property
     def color(self):

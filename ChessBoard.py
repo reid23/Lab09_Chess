@@ -136,6 +136,7 @@ class Board:
             
         self.gameState = self._empty(8,8,3)
         for p in self._initPieces:
+            print("----f-ads;lfjkasdflk",p)
             self.putThing(p.copy(), p.curPos) #add this to pieces
             # print(p, p.curPos,self.gameState[p.curPos[0]][p.curPos[1]][2])
 

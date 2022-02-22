@@ -158,7 +158,7 @@ class ChessGUI:
         curY = int(curY/10)
         print("------",curX,curY)
 
-        curPos = (curX, curY)
+        curPos = (int(curX), int(curY))
         
         if curPos in self.curLitUp:
             self.clickedLitPiece = True

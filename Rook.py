@@ -2,7 +2,7 @@
 from ChessPiece import ChessPiece
 
 class Rook(ChessPiece):
-    def __init__(self, color, pos, startPos):
+    def __init__(self, color, pos:tuple, startPos:tuple):
         super().__init__(color, pos, startPos)
 
         self.rules=(
@@ -22,7 +22,7 @@ class Rook(ChessPiece):
         #   self.checkCheck
         #   within bounds
 
-        return []
+        # return []
 
         for counter, mov in enumerate(nxs):
             if not self.withinBounds(self._toGlobal(pos, mov)): #if the move is outside the board...
