@@ -42,27 +42,29 @@ class Board:
                 Pawn(True, (7,1), startPos=(7,1)),
                 Pawn(False, (7,6), startPos=(7,6)),
 
-                Knight(True, (1,0)),
-                Knight(True, (6,0)),
-                Knight(False, (1,7)),
-                Knight(False, (6,7)),
+                Knight(True, (1,0),(1,0)),
+                Knight(True, (6,0),(6,0)),
+                Knight(False, (1,7),(1,7)),
+                Knight(False, (6,7),(6,7)),
 
-                Rook(True, (0,0)),
-                Rook(True, (7,0)),
-                Rook(False, (0,7)),
-                Rook(False, (7,7)),
+                Rook(True, (0,0),(0,0)),
+                Rook(True, (7,0),(7,0)),
+                Rook(False, (0,7),(0,7)),
+                Rook(False, (7,7),(7,7)),
 
-                Bishop(True, (2,0)),
-                Bishop(True, (5,0)),
-                Bishop(False, (2,7)),
-                Bishop(False, (5,7)),
+                Bishop(True, (2,0),(2,0)),
+                Bishop(True, (5,0),(5,0)),
+                Bishop(False, (2,7),(2,7)),
+                Bishop(False, (5,7),(5,7)),
 
-                King(True, (4,0)),
-                King(False, (4,7)),
-                Queen(True, (3,0)),
-                Queen(False, (3,7)),
+                King(True, (4,0),(4,0)),
+                King(False, (4,7),(4,7)),
+                Queen(True, (3,0),(3,0)),
+                Queen(False, (3,7),(3,7)),
             }
-            self._initPieces = self.pieces.copy()
+            self._initPieces = []
+            for i in self.pieces:
+                self._initPieces.append(i.copy())
         self.n=0
         self.iterReturns='squares'
         self.descriminator=lambda x: True
@@ -87,7 +89,7 @@ class Board:
         return self.gameState==other.getGameState()
 
     def copy(self):
-        return Board(self.getGameState('pieces'), board=self.getGameState('all'))
+        return Board(self.getGameState('piecesOnBoard'), board=self.getGameState('allCopy'))
     
     def checkCheckGivenMov(self, piece, mov):
         """checks if a $piece can do a $movement without creating a check
@@ -127,11 +129,11 @@ class Board:
                 self.gameState[x][y][2].undraw()
             
         self.gameState = self._empty(8,8,3)
-        for p in self._initPieces.copy():
-            self.putThing(p, p.curPos) #add this to pieces
-            print(p, p.curPos,self.gameState[p.curPos[0]][p.curPos[1]][2])
+        for p in self._initPieces:
+            self.putThing(p.copy(), p.curPos) #add this to pieces
+            # print(p, p.curPos,self.gameState[p.curPos[0]][p.curPos[1]][2])
 
-        print("+++++++++++++")
+        # print("+++++++++++++")
         for x, y in [[x, y] for x in range(8) for y in range(8)]:
             r = Rectangle(Point(10*x,10*y), Point(10*(x+1),10*(y+1)))
             r.setOutline("white")
@@ -159,12 +161,35 @@ class Board:
         match elements:
             case 'all':
                 return self.gameState.copy()
+            case 'allCopy':
+                copyBoard = self._empty(8,8,3)
+                for x in range(2):
+                    for i in range(8):
+                        for j in range(8):
+                            copyBoard[i][j][x] = self.gameState[i][j][x]
+                for i in range(8):
+                    for j in range(8):
+                        if (self.gameState[i][j][2] != None):
+                            copyBoard[i][j][2] = self.gameState[i][j][2].copy()
+
+                return copyBoard
             case 'tile':
                 return self.gameState[0].copy()
             case 'lit':
                 return self.gameState[1]
             case 'piecesOnBoard':
-                return self.gameState[2].copy()
+                copyPieces = self._empty(8,8)
+                # print(copyPieces)
+                # for i in range(8):
+                #     for j in range(8):
+                #         print(i,j)
+                #         print(copyPieces[i][j])
+                for i in range(8):
+                    for j in range(8):
+                        # print(i,j)
+                        if (self.gameState[i][j][2] != None):
+                            copyPieces[i][j] = self.gameState[i][j][2].copy()
+                return copyPieces
             case 'pieces':
                 return self.pieces
 
@@ -242,6 +267,8 @@ class Board:
         for move in moves:
             self.putThing(True, move, 'lit')
 
+        return moves
+
         
     def __sub__(self, other):
         """subtraction between board classes.  don't call directly, do changes=oldBoard-newBoard
@@ -261,9 +288,20 @@ class Board:
         output=[]
         for i in range(8):
             for j in range(8):
-                for k in range(1,3):
-                    if other.getThing(i, j, k) != self.gameState[i][j][k]:
-                        output.append(((i, j, k), self.gameState[i][j][k]))
+                # check lit squares
+                if other.getThing(i, j, 1) != self.gameState[i][j][1]:
+                    print(i,j,other.getThing(i, j, 1), self.gameState[i][j][1])
+                    output.append(((i, j, 1), self.gameState[i][j][1]))
+                # only if both are not none
+                if not (other.getThing(i, j, 2) == None and self.gameState[i][j][2] == None):
+                    if other.getThing(i, j, 2) == None and self.gameState[i][j][2] != None:
+                        output.append(((i, j, 2), self.gameState[i][j][2]))
+                    if other.getThing(i, j, 2) != None and self.gameState[i][j][2] == None:
+                        output.append(((i, j, 2), self.gameState[i][j][2]))
+                    if other.getThing(i, j, 2) != None and self.gameState[i][j][2] != None:
+                        if not (other.getThing(i, j, 2).color == self.gameState[i][j][2].color and other.getThing(i, j, 2).getType() == self.gameState[i][j][2].getType()):
+                            output.append(((i, j, 2), self.gameState[i][j][2]))
+
         return tuple(output)
 
     def putThing(self, thing, position, thingType='piece'):

@@ -4,14 +4,14 @@ from ChessPiece import ChessPiece
 class Knight (ChessPiece):
     """Defines a Knight chess piece for a chess game"""
 
-    def __init__(self, color, pos):
+    def __init__(self, color, pos, startPos):
         """Creates a new Knight!
 
         Args:
             color (bool): True if white, False if black
             pos (tuple): initial position of the pawn
         """
-        super().__init__(color, pos)
+        super().__init__(color, pos, startPos)
         self.rules = ((2,1),(2,-1),(1,2),(1,-2),(-2,1),(-2,-1),(-1,2),(-1,-2))
              
     def calculatePossibleMoves(self, gameState, pos):

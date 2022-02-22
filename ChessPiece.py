@@ -4,7 +4,7 @@ from graphics import Image, Point
 class ChessPiece(Image):
     """Defines a general chess piece for a chess game"""
 
-    def __init__(self, color: bool, pos: tuple):
+    def __init__(self, color: bool, pos: tuple, startPos : tuple):
         """Creates a new Chess Piece
 
         Args:
@@ -14,11 +14,12 @@ class ChessPiece(Image):
         super().__init__(Point(pos[0]*10+5, pos[1]*10+5), f"images/{self.__class__.__name__}{'W' if color else 'B'}.png")
         self._color = color
         self._curPos = pos
+        self._startPos = startPos
         self.rules = []
         self.image = 0
     
     def copy(self):
-        return type(self)(color=self._color, pos=self._curPos)
+        return type(self)(color=self._color, pos=self._curPos, startPos=self._startPos)
     
     def __repr__(self):
         return f"{self.__class__.__name__}({self._color}, {self._curPos})"
@@ -31,6 +32,10 @@ class ChessPiece(Image):
     
     def __eq__(self, other):
         return isinstance(other, type(self)) and self._color==other.color and self._curPos==other.curPos
+    
+    def setPos(self, oldPos, newPos):
+        self._curPos = newPos
+        self._move((newPos[0]-oldPos[0])*10, (newPos[1]-oldPos[1])*10)
     
     @property
     def curPos(self):
@@ -82,7 +87,17 @@ class ChessPiece(Image):
         """
 
         # will bring the below back once everything is merged
-        newGameState = gameState.copy() # implemented~
+        newGameState = self._empty(8,8,3)
+    
+        for x in range(2):
+            for i in range(8):
+                for j in range(8):
+                    newGameState[i][j][x] = gameState[i][j][x]
+        for i in range(8):
+            for j in range(8):
+                if (newGameState[i][j][2] != None):
+                    newGameState[i][j][2] = gameState[i][j][2].copy()
+
         # replace with moved chess piece
         newGameState[move[0]][move[1]][2] = newGameState[pos[0]][pos[1]][2]
         newGameState[pos[0]][pos[1]][2] = None
@@ -105,6 +120,40 @@ class ChessPiece(Image):
                         return True
         
         return False
+
+    @staticmethod
+    def _empty(*shape, initialVal=None):
+        """generates a list with the given shape, whose values are initialVal
+
+        Args:
+            *shape (int, multiple values accepted): integers describing the length of each dimension of the requested list.
+            initialVal (any, optional): the values in the list. Defaults to None.
+
+        Returns:
+            list: the requested list
+        """
+        shape=list(shape)
+        shape.reverse()
+        output=(initialVal,)
+        for i in shape:
+            output=output*i
+            output=(output,)
+        return ChessPiece.convert(output[0]) #convert to list, and take out extra dimension from previous line on last iteration
+    
+    @staticmethod
+    def convert(t): #recursion go brrrrr
+        """converts a tuple to a list recursively
+
+        Args:
+            t (tuple): the input tuple
+
+        Returns:
+            list: the same thing as the input, but as a list
+        """
+        if isinstance(t, tuple):
+            return list(ChessPiece.convert(i) for i in t)
+        else:
+            return t
 
     def getAllMoves(self, pos):
         """Returns a list of tuples of moves from given position

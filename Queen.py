@@ -4,14 +4,14 @@ from ChessPiece import ChessPiece # remove later
 class Queen (ChessPiece):
     """Defines a Queen chess piece for a chess game"""
 
-    def __init__(self, color, pos):
+    def __init__(self, color, pos,startPos):
         """Creates a new Queen!
 
         Args:
             color (bool): True if white, False if black
             pos (tuple): initial position of the pawn
         """
-        super().__init__(color, pos)
+        super().__init__(color, pos,startPos)
         self.rules = ((0,1),(0,-1),(1,1),(1,-1),(1,0),(-1,1),(-1,-1),(-1,0))
              
     def calculatePossibleMoves(self, gameState, pos):
@@ -77,12 +77,3 @@ def main():
 if __name__ == "__main__": 
     from graphics import * 
     main()
-
-
-
-
-    
-
-    
-
-

@@ -2,8 +2,8 @@
 from ChessPiece import ChessPiece
 
 class Bishop(ChessPiece):
-    def __init__(self, color, pos=tuple):
-        super().__init__(color, pos)
+    def __init__(self, color, pos, startPos):
+        super().__init__(color, pos,startPos)
 
         self.rules=(
             tuple((i, i) for i in range(8)), 

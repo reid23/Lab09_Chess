@@ -23,10 +23,9 @@ class ChessGUI:
         self.win.setBackground("white")
         self.win.setCoords(-10,-30,150,90)
         self.chessBoard = Board()
-        # self.chessBoard.reset()
-        for x in range(8):
-            for y in range(8):
-                self.chessBoard.getThing(x,y,0).draw(self.win)
+        # for x in range(8):
+        #     for y in range(8):
+        #         self.chessBoard.getThing(x,y,0).draw(self.win)
         self.quitButton = Button(Point(115,-8), 50, 8, "Quit", self.win)
         self.quitButton.activate()
         self.replayButton = Button(Point(115,-20), 50, 8, "Reset", self.win)
@@ -49,25 +48,27 @@ class ChessGUI:
         self.prompt = Text(Point(40,-14), "Prompt goes here")
         self.prompt.draw(self.win)
 
+        for i in range(8):
+            Text(Point(10*i+5, 82.5), chr(i+ord('a'))).draw(self.win)
+        for i in range(8):
+            Text(Point(82.5, 10*i+5), i+1).draw(self.win)
+
         self.done = False
 
         self.updatePrompt("ghello there my name is alison this is a test because i don't know what else to say hello hello everything is awesome no i'm not qutoing a movieeee")
 
         self.curPlayer = True # true for white, start with white
 
-        self.prevState = Board()
-        # self.prevState.reset()
-        # for i in range(8):
-        #     for j in range(8):
-        #         if (i%3 == 0):
-        #             self.prevState.putThing(True, (i,j), 'lit')
-        #         self.prevState.putThing(Pawn(True,(i,j)), (i,j), 'piece')
-
         self.resetGame()
+        self.prevState = self.chessBoard.copy()
         self.updateWin()
 
         # MOVE STATES
         self.hasSelected = False
+
+        self.curLitUp = []
+
+        self.clickedLitPiece = False
 
     
     def resetGame(self):
@@ -80,19 +81,25 @@ class ChessGUI:
                 if piece != None:
                     piece.undraw()
                 self.chessBoard.getThing(x, y, 0).undraw()
+        
+        # copyBoard = self.chessBoard.copy()
         self.chessBoard.reset()
+        self.prevState = self.chessBoard.copy()
+        # self.drawDiff(self.chessBoard-copyBoard, True)
 
         for x in range(8):
             for y in range(8):
+                self.chessBoard.getThing(x, y, 0).undraw()
                 self.chessBoard.getThing(x, y, 0).draw(self.win)
                 piece = self.chessBoard.getThing(x, y, 2)
-                print(piece, "----")
                 if piece != None:
-                    print(piece.curPos)
+                    # print(piece.curPos)
+                    piece.undraw()
                     piece.draw(self.win)
         
         self.curPlayer = True
         self.hasSelected = False
+        self.clickedLitPiece = False
 
 
     def updatePrompt(self, msg : str) -> None:
@@ -121,14 +128,25 @@ class ChessGUI:
     def updateWin(self):
         for j in range(8):
             for i in range(8):
-                print(self.prevState.getThing(7-i,7-j,2),end=" ")
+                # print(self.prevState.getThing(i,7-j,2), "(", id(self.prevState.getThing(i,7-j,2)), ")", end=" ")
+                print(self.prevState.getThing(i,7-j,2),end=" ")
             print()
-        self.drawDiff(self.prevState - self.chessBoard)
-        # print(self.prevState - self.chessBoard)
+
+        print("------")
+        for j in range(8):
+            for i in range(8):
+                # print(self.chessBoard.getThing(i,7-j,2), "(", id(self.chessBoard.getThing(i,7-j,2)), ")",end=" ")
+                print(self.chessBoard.getThing(i,7-j,2), end=" ")
+            print()
+
+        print(self.chessBoard-self.prevState)
+        self.drawDiff(self.chessBoard-self.prevState)
+        
         self.win.update()
         
     
     def coordClicked(self, pt):
+        self.prevState = self.chessBoard.copy()
         # returns tuple of grid cooord that has been pressed
         # TODO IMPLEMENT
         print("=======", self.curPlayer)
@@ -139,15 +157,41 @@ class ChessGUI:
         curX = int(curX/10)
         curY = int(curY/10)
         print("------",curX,curY)
+
+        curPos = (curX, curY)
+        
+        if curPos in self.curLitUp:
+            self.clickedLitPiece = True
+            # move that piece there!
+            self.chessBoard.putThing(self.chessBoard.getThing(self.origPiecePos[0],self.origPiecePos[1], 2), curPos, 'piece')
+            self.chessBoard.getThing(self.origPiecePos[0],self.origPiecePos[1], 2).setPos(self.origPiecePos,curPos)
+            self.chessBoard.putThing(None, self.origPiecePos, 'piece')
+            for pos in self.curLitUp:
+                self.chessBoard.putThing(False, pos, 'lit')
+            self.curLitUp = []
+            return True
+        elif self.hasSelected:
+            for pos in self.curLitUp:
+                self.chessBoard.putThing(False, pos, 'lit')
+            self.curLitUp = []
         
         if self.chessBoard.getThing(curX,curY,2) == None:
-            print("************")
+            self.hasSelected = False
+            if self.clickedLitPiece: # already clicked a lit piece
+                for pos in self.curLitUp:
+                    self.chessBoard.putThing(False, pos, 'lit')
+            self.curLitUp = []
             return False
         if self.chessBoard.getThing(curX,curY,2).color == self.curPlayer:
-            print("===========")
-            self.chessBoard.lightUpSquares((curX,curY))
+            self.hasSelected = True
+            self.origPiecePos = curPos
+            if self.clickedLitPiece: # already clicked a lit piece
+                for pos in self.curLitUp:
+                    self.chessBoard.putThing(False, pos, 'lit')
+            self.curLitUp = self.chessBoard.lightUpSquares((curX,curY))
             return True
         return False
+        
 
 
     def update(self):
@@ -172,9 +216,25 @@ class ChessGUI:
             # 1) select piece to move
             # 2) select place to move that piece
             # IF THE COORD CLICKED IS NOT YOUR PIECE, DO NOT USE IT
-            self.hasSelected = True
+            print("YO COORD CLICKED!")
 
-        self.curPlayer = not self.curPlayer # NO REPEAT THAT
+            print("has selected a piece:", self.hasSelected)
+            print("has clicked a piece:", self.clickedLitPiece)
+            print("cur player:", self.curPlayer)
+            if (self.hasSelected and self.clickedLitPiece):
+                self.hasSelected = False
+                self.clickedLitPiece = False
+                self.curPlayer = not self.curPlayer
+                print("CHANGED PLAYER")
+        else:
+            print("has selected a piece:", self.hasSelected)
+            print("has clicked a piece:", self.clickedLitPiece)
+            print("cur player:", self.curPlayer)
+            for pos in self.curLitUp:
+                self.chessBoard.putThing(False, pos, 'lit')
+            self.hasSelected = False
+
+        
         
         self.updateWin()
 
@@ -186,19 +246,34 @@ class ChessGUI:
         """
         return self.done
     
-    def drawDiff(self, changes):
+    def drawDiff(self, changes, start=False):   
+        if start:
+            # redraw the entire base   
+            for x in range(8):
+                for y in range(8):
+                    prevTile = self.prevState.getThing(x,y,0)
+                    curTile = self.chessBoard.getThing(x,y,0)
+                    prevTile.undraw()
+                    curTile.undraw()
+
+                    if x%2 == 0 and y%2 == 0 or x%2 != 0 and y%2 != 0:
+                        curTile.setFill('grey')
+                    else:
+                        curTile.setFill(color_rgb(245, 245, 242))
+
+                    curTile.draw(self.win)
+                    
         for change in changes:
             x = change[0][0]
             y = change[0][1]
-            # print(change,end="  ")
-            # print("===",x,y, end = "     ")
-            # print(self.prevState.getThing(x,y,change[0][2]))
+            print(change,end="  ")
+            print("===",x,y, end = "     ")
+            print(self.prevState.getThing(x,y,change[0][2]))
 
 
             if (change[0][2] == 1):
                 # curTileOn = self.chessBoard.getThing(x,y,1)
                 prevTile = self.prevState.getThing(x,y,0)
-                self.chessBoard.putThing(prevTile, (x,y),'tile')
                 curTile = self.chessBoard.getThing(x,y,0)
                 prevTile.undraw()
                 curTile.undraw()
@@ -214,18 +289,19 @@ class ChessGUI:
                 curTile.draw(self.win)
                 
 
-            if (change[0][2] == 2):
-                # change piece??
+            # if (change[0][2] == 2):
+                #     # change piece??
+                print("____DFSDL:FKJSDL:KFJSDL:KFJL:SDKFKSDLF")
                 curPiece = self.chessBoard.getThing(x,y,2)
                 prevPiece = self.prevState.getThing(x,y,2)
-                print(curPiece, prevPiece)
+                    # print(curPiece, prevPiece)
                 if prevPiece != None:
                     prevPiece.undraw()
                 if curPiece != None:
                     curPiece.undraw()
                     curPiece.draw(self.win)
 
-                    
+          
 
         # change the prev state to cur state
         self.prevState = self.chessBoard.copy()

@@ -4,8 +4,8 @@ from ChessPiece import ChessPiece
 from graphics import *
 #%%
 class King(ChessPiece):
-    def __init__(self, color, pos='dont pass'):
-        super().__init__(color, pos)
+    def __init__(self, color, pos, startPos):
+        super().__init__(color, pos, startPos)
         self.rules=((1, 0), (1,  1),
                     (0, 1), (-1, 1),
                     (-1,0), (-1,-1),

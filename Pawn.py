@@ -9,11 +9,11 @@ class Pawn(ChessPiece):
             color (bool): True if white, False if black
             pos (tuple): initial position of the pawn
         """
-        super().__init__(color, pos)
+        super().__init__(color, pos, startPos)
         if color: # white
-            self.rules = [(0,1),(0,2)]
+            self.rules = [(0,1),(0,2),(1,1),(-1,1)]
         else:
-            self.rules = [(0,-1),(0,-2)]
+            self.rules = [(0,-1),(0,-2),(1,-1),(-1,-1)]
         self.startPos = startPos
              
     def calculatePossibleMoves(self, gameState, pos):
@@ -29,19 +29,34 @@ class Pawn(ChessPiece):
             move = (pos[0]+rel[0], pos[1]+rel[1]) 
             # if both withiin bounds and overtakes an empty or diifferent color piece
             if self.withinBounds(move):
+                print("--------", gameState[move[0]][move[1]][2])
                 if gameState[move[0]][move[1]][2] != None:
+                    print("1")
                     color = gameState[move[0]][move[1]][2].color
                     if color == self.color: # same color, just break
+                        print("2")
                         continue
-                    
+                print("3")
                 # if move does not cause a checkmate and is not something of the same color
                 if (not self.checkCheck(gameState, pos, move, self.color)):
+                    print("4")
                     # if special move
                     if rel == (0,2) or rel == (0,-2):
+                        print("5")
                         # only append if in starting position
                         if pos == self.startPos:
+                            print("6")
+                            moves.append(move)
+                    elif rel in [(1,1),(-1,1),(1,-1),(-1,-1)]:
+                        if gameState[move[0]][move[1]][2] != None:
+                            color = gameState[move[0]][move[1]][2].color
+                            if color != self.color: # different color
+                                moves.append(move)
+                    elif rel in [(0,1),(0,-1)]:
+                        if gameState[move[0]][move[1]][2] == None:
                             moves.append(move)
                     else:
+                        print("7")
                         moves.append(move)
         
         return moves
