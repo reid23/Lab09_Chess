@@ -102,6 +102,7 @@ class ChessGUI:
         self.curPlayer = True
         self.hasSelected = False
         self.clickedLitPiece = False
+        self.newMessage = "Welcome to a new game of chess! It is white's turn."
         self.updatePrompt("Welcome to a new game of chess! It is white's turn.")
 
 
@@ -158,6 +159,7 @@ class ChessGUI:
         print("=======", self.curPlayer)
         curX = pt.getX()
         curY = pt.getY()
+        self.newMessage = "It is white's turn! Click a white piece to move." if self.curPlayer else "It is black's turn! Click a black piece to move."
         if (curX < 0 or curY < 0 or curX > 80 or curY > 80):
             return False
         curX = int(curX/10)
@@ -165,6 +167,7 @@ class ChessGUI:
         print("------",curX,curY)
 
         curPos = (int(curX), int(curY))
+        
         
         if curPos in self.curLitUp:
             self.clickedLitPiece = True
@@ -193,14 +196,15 @@ class ChessGUI:
             if self.hasSelected:
                 self.newMessage = "That is not a valid move."
                 self.newMessage += " Please click on a white piece." if self.curPlayer else "Please click on a black piece."
-            else:
-                self.newMessage = "Please click on a " + "white piece." if self.curPlayer else "black piece"
+            # else:
+            #     self.newMessage = "Please click on a " + "white piece." if self.curPlayer else "black piece"
             self.hasSelected = False
             if self.clickedLitPiece: # already clicked a lit piece
                 for pos in self.curLitUp:
                     self.chessBoard.putThing(False, pos, 'lit')
             self.curLitUp = []
             return False
+
         if self.chessBoard.getThing(curX,curY,2).color == self.curPlayer:
             self.hasSelected = True
             self.origPiecePos = curPos
@@ -216,7 +220,6 @@ class ChessGUI:
                 self.newMessage += " Please select a move from the indicated options."
             self.updatePrompt(self.newMessage)
             return True
-
 
         return False
         
@@ -243,7 +246,6 @@ class ChessGUI:
             # 2) select place to move that piece
             # IF THE COORD CLICKED IS NOT YOUR PIECE, DO NOT USE IT
             print("YO COORD CLICKED!")
-
             print("has selected a piece:", self.hasSelected)
             print("has clicked a piece:", self.clickedLitPiece)
             print("cur player:", self.curPlayer)
@@ -256,6 +258,8 @@ class ChessGUI:
                 else:
                     self.updatePrompt(self.newMessage+" It is black's turn!")
                 print("CHANGED PLAYER")
+            else:
+                self.updatePrompt(self.newMessage)
         else:
             print("has selected a piece:", self.hasSelected)
             print("has clicked a piece:", self.clickedLitPiece)
