@@ -102,8 +102,8 @@ class ChessGUI:
         self.curPlayer = True
         self.hasSelected = False
         self.clickedLitPiece = False
-        self.newMessage = "Welcome to a new game of chess! It is white's turn."
-        self.updatePrompt("Welcome to a new game of chess! It is white's turn.")
+        self.newMessage = "Welcome to a new game of chess! It is White's turn."
+        self.updatePrompt("Welcome to a new game of chess! It is White's turn.")
 
 
     def updatePrompt(self, msg : str) -> None:
@@ -161,7 +161,7 @@ class ChessGUI:
         # print("=======", self.curPlayer)
         curX = pt.getX()
         curY = pt.getY()
-        self.newMessage = "It is white's turn! Click a white piece to move." if self.curPlayer else "It is black's turn! Click a black piece to move."
+        self.newMessage = "It is White's turn! Click a white piece to move." if self.curPlayer else "It is Black's turn! Click a black piece to move."
         if (curX < 0 or curY < 0 or curX > 80 or curY > 80):
             return False
         curX = int(curX/10)
@@ -183,7 +183,8 @@ class ChessGUI:
                 self.newMessage += " moved " + self.chessBoard.getThing(curPos[0],curPos[1], 2).getType() + " to " + chr(ord('a')+curPos[0]) + str(curPos[1] + 1) + "."
             else:
                 self.newMessage = "White's " if self.curPlayer else "Black's "
-                self.newMessage += self.chessBoard.getThing(curPos[0],curPos[1], 2).getType() + " captured " + "Black's " if self.curPlayer else "White's "
+                self.newMessage += self.chessBoard.getThing(curPos[0],curPos[1], 2).getType() + " captured "
+                self.newMessage += "Black's " if self.curPlayer else "White's "
                 self.newMessage += prevPiece.getType() + " at " + chr(ord('a')+curPos[0]) + str(curPos[1] + 1) + "."
             for pos in self.curLitUp:
                 self.chessBoard.putThing(False, pos, 'lit')
@@ -203,7 +204,7 @@ class ChessGUI:
         if self.chessBoard.getThing(curX,curY,2) == None:
             if self.hasSelected:
                 self.newMessage = "That is not a valid move."
-                self.newMessage += " Please click on a white piece." if self.curPlayer else "Please click on a black piece."
+                self.newMessage += " Please click on a white piece." if self.curPlayer else " Please click on a black piece."
             # else:
             #     self.newMessage = "Please click on a " + "white piece." if self.curPlayer else "black piece"
             self.hasSelected = False
@@ -262,9 +263,9 @@ class ChessGUI:
                 self.clickedLitPiece = False
                 self.curPlayer = not self.curPlayer
                 if self.curPlayer:
-                    self.updatePrompt(self.newMessage+" It is white's turn!")
+                    self.updatePrompt(self.newMessage+" It is White's turn!")
                 else:
-                    self.updatePrompt(self.newMessage+" It is black's turn!")
+                    self.updatePrompt(self.newMessage+" It is Black's turn!")
                 # print("CHANGED PLAYER")
             else:
                 self.updatePrompt(self.newMessage)
