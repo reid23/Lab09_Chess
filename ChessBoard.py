@@ -124,7 +124,20 @@ class Board:
             
 
 
+    def changeToQueenAt(self, pos):
+        """Change given position to a queen. Used when pawn gets to the end of the board!
 
+        Args:
+            pos (tuple): position of object to change
+        """
+        x = pos[0]
+        y = pos[1]
+        origPiece = self.getThing(x,y,2)
+        if origPiece == None:
+            return
+        # print("alsdfja;sldkfja;sldkfja;slkdfjas;ldkfj", origPiece)
+        color = origPiece.color
+        self.putThing(Queen(color,pos,pos),pos,'piece')
 
 
     def reset(self):
@@ -136,7 +149,7 @@ class Board:
             
         self.gameState = self._empty(8,8,3)
         for p in self._initPieces:
-            print("----f-ads;lfjkasdflk",p)
+            # print("----f-ads;lfjkasdflk",p)
             self.putThing(p.copy(), p.curPos) #add this to pieces
             # print(p, p.curPos,self.gameState[p.curPos[0]][p.curPos[1]][2])
 
@@ -264,13 +277,13 @@ class Board:
     def lightUpSquares(self, clickedSquare: tuple):
         curX = clickedSquare[0]
         curY = clickedSquare[1]
-        print("=============",self.gameState[curX][curY][2])
+        # print("=============",self.gameState[curX][curY][2])
         if self.gameState[curX][curY][2] == None:
             return
         # rule=lambda x: x in self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('all'), (curX, curY))
         # self.putThingRule(True, rule, thingType='lit')
         moves = self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('all'), (curX, curY))
-        print(moves)
+        # print(moves)
         for move in moves:
             self.putThing(True, move, 'lit')
 

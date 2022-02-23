@@ -130,33 +130,35 @@ class ChessGUI:
             cur += 65
         s+=msg[prev:]
         self.prompt.setText(s) # TODO: fix length of message, needs to wrap :)
+        print(msg)
     
 
     def updateWin(self):
-        for j in range(8):
-            for i in range(8):
-                # print(self.prevState.getThing(i,7-j,2), "(", id(self.prevState.getThing(i,7-j,2)), ")", end=" ")
-                print(self.prevState.getThing(i,7-j,2),end=" ")
-            print()
+        # for j in range(8):
+        #     for i in range(8):
+        #         # print(self.prevState.getThing(i,7-j,2), "(", id(self.prevState.getThing(i,7-j,2)), ")", end=" ")
+        #         print(self.prevState.getThing(i,7-j,2),end=" ")
+        #     print()
 
-        print("------")
-        for j in range(8):
-            for i in range(8):
-                # print(self.chessBoard.getThing(i,7-j,2), "(", id(self.chessBoard.getThing(i,7-j,2)), ")",end=" ")
-                print(self.chessBoard.getThing(i,7-j,2), end=" ")
-            print()
+        # print("------")
+        # for j in range(8):
+        #     for i in range(8):
+        #         # print(self.chessBoard.getThing(i,7-j,2), "(", id(self.chessBoard.getThing(i,7-j,2)), ")",end=" ")
+        #         print(self.chessBoard.getThing(i,7-j,2), end=" ")
+        #     print()
 
         print(self.chessBoard-self.prevState)
         self.drawDiff(self.chessBoard-self.prevState)
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
         
         self.win.update()
         
     
     def coordClicked(self, pt):
-        self.prevState = self.chessBoard.copy()
+        # self.prevState = self.chessBoard.copy()
         # returns tuple of grid cooord that has been pressed
         # TODO IMPLEMENT
-        print("=======", self.curPlayer)
+        # print("=======", self.curPlayer)
         curX = pt.getX()
         curY = pt.getY()
         self.newMessage = "It is white's turn! Click a white piece to move." if self.curPlayer else "It is black's turn! Click a black piece to move."
@@ -164,7 +166,7 @@ class ChessGUI:
             return False
         curX = int(curX/10)
         curY = int(curY/10)
-        print("------",curX,curY)
+        # print("------",curX,curY)
 
         curPos = (int(curX), int(curY))
         
@@ -186,6 +188,12 @@ class ChessGUI:
             for pos in self.curLitUp:
                 self.chessBoard.putThing(False, pos, 'lit')
             self.curLitUp = []
+
+            curPiece = self.chessBoard.getThing(curPos[0], curPos[1],2)
+            if (curPiece.getType() == 'Pawn' and (curPos[1] == 0 or curPos[1] == 7)):
+                self.chessBoard.changeToQueenAt(curPos)
+                self.chessBoard.putThing(None, self.origPiecePos, 'piece')
+                self.newMessage += " The pawn has reached the opposing end and has been upgraded as a result!"
             return True
         elif self.hasSelected:
             for pos in self.curLitUp:
@@ -245,10 +253,10 @@ class ChessGUI:
             # 1) select piece to move
             # 2) select place to move that piece
             # IF THE COORD CLICKED IS NOT YOUR PIECE, DO NOT USE IT
-            print("YO COORD CLICKED!")
-            print("has selected a piece:", self.hasSelected)
-            print("has clicked a piece:", self.clickedLitPiece)
-            print("cur player:", self.curPlayer)
+            # print("YO COORD CLICKED!")
+            # print("has selected a piece:", self.hasSelected)
+            # print("has clicked a piece:", self.clickedLitPiece)
+            # print("cur player:", self.curPlayer)
             if (self.hasSelected and self.clickedLitPiece):
                 self.hasSelected = False
                 self.clickedLitPiece = False
@@ -257,13 +265,13 @@ class ChessGUI:
                     self.updatePrompt(self.newMessage+" It is white's turn!")
                 else:
                     self.updatePrompt(self.newMessage+" It is black's turn!")
-                print("CHANGED PLAYER")
+                # print("CHANGED PLAYER")
             else:
                 self.updatePrompt(self.newMessage)
         else:
-            print("has selected a piece:", self.hasSelected)
-            print("has clicked a piece:", self.clickedLitPiece)
-            print("cur player:", self.curPlayer)
+            # print("has selected a piece:", self.hasSelected)
+            # print("has clicked a piece:", self.clickedLitPiece)
+            # print("cur player:", self.curPlayer)
             self.updatePrompt(self.newMessage)
             for pos in self.curLitUp:
                 self.chessBoard.putThing(False, pos, 'lit')
@@ -299,42 +307,58 @@ class ChessGUI:
                     curTile.draw(self.win)
                     
         for change in changes:
+            print(change, end="----")
             x = change[0][0]
             y = change[0][1]
-            print(change,end="  ")
-            print("===",x,y, end = "     ")
-            print(self.prevState.getThing(x,y,change[0][2]))
+            # print(change,end="  ")
+            # print("===",x,y, end = "     ")
+            # print(self.prevState.getThing(x,y,change[0][2]))
 
 
-            if (change[0][2] == 1):
-                # curTileOn = self.chessBoard.getThing(x,y,1)
-                prevTile = self.prevState.getThing(x,y,0)
-                curTile = self.chessBoard.getThing(x,y,0)
-                prevTile.undraw()
-                curTile.undraw()
+            # if (change[0][2] == 1):
+            curTileOn = self.chessBoard.getThing(x,y,1)
+            prevTile = self.prevState.getThing(x,y,0)
+            curTile = self.chessBoard.getThing(x,y,0)
+            prevTile.undraw()
+            curTile.undraw()
 
-                if change[1]:
-                    curTile.setFill(color_rgb(149, 222, 146))
+            if change[0][2] == 1 and change[1]:
+                curTile.setFill(color_rgb(149, 222, 146))
+            else:
+                if x%2 == 0 and y%2 == 0 or x%2 != 0 and y%2 != 0:
+                    curTile.setFill('grey')
                 else:
-                    if x%2 == 0 and y%2 == 0 or x%2 != 0 and y%2 != 0:
-                        curTile.setFill('grey')
-                    else:
-                        curTile.setFill(color_rgb(245, 245, 242))
+                    curTile.setFill(color_rgb(245, 245, 242))
 
-                curTile.draw(self.win)
+            curTile.draw(self.win)
+                # curTile = self.prevState.getThing(x,y,0)
+                # self.chessBoard.putThing(self.prevState.getThing(x,y,1),(x,y),0)
+                # if change[1]:
+                #     curTile.setFill(color_rgb(149, 222, 146))
+                # else:
+                #     if x%2 == 0 and y%2 == 0 or x%2 != 0 and y%2 != 0:
+                #         curTile.setFill('grey')
+                #     else:
+                #         curTile.setFill(color_rgb(245, 245, 242))
+
                 
 
             # if (change[0][2] == 2):
                 #     # change piece??
-                print("____DFSDL:FKJSDL:KFJSDL:KFJL:SDKFKSDLF")
-                curPiece = self.chessBoard.getThing(x,y,2)
-                prevPiece = self.prevState.getThing(x,y,2)
-                    # print(curPiece, prevPiece)
-                if prevPiece != None:
-                    prevPiece.undraw()
-                if curPiece != None:
-                    curPiece.undraw()
-                    curPiece.draw(self.win)
+                # print("____DFSDL:FKJSDL:KFJSDL:KFJL:SDKFKSDLF")
+            curPiece = self.chessBoard.getThing(x,y,2)
+            prevPiece = self.prevState.getThing(x,y,2)
+            print("prevPiece: ", prevPiece, curPiece)
+                # print(curPiece, prevPiece)
+            if prevPiece != None:
+                prevPiece.undraw()
+                print("undraw previous piece")
+            if curPiece != None:
+                curPiece.undraw()
+                curPiece.draw(self.win)
+                print("draw this piece: ", curPiece)
+
+            print("+============================", self.prevState.getThing(4,6,2), self.chessBoard.getThing(4,6,2))
 
           
 
