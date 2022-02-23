@@ -30,10 +30,10 @@ class Rook(ChessPiece):
                 break
             if isinstance(gameState[mov[0]][mov[1]][2], ChessPiece):
                 del nxs[counter+1:] #remove all moves blocked by this piece
-                if gameState[mov[0]][mov[1]][2].color==self.color or self.checkCheck(gameState, pos, mov):
+                if gameState[mov[0]][mov[1]][2].color==self.color or self.checkCheck(gameState, pos, mov, self.color):
                     del nxs[counter] #delete this space too if it's the same color as me or if it would cause a checkmate
                 break #then break, no more deciding to do for this section
-            if self.checkCheck(gameState, pos, mov): #even if it's not a piece, we shouldn't allow check/checkmate
+            if self.checkCheck(gameState, pos, mov, self.color): #even if it's not a piece, we shouldn't allow check/checkmate
                 del nxs[counter]
                 continue
             

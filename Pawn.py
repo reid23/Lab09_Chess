@@ -45,8 +45,11 @@ class Pawn(ChessPiece):
                         print("5")
                         # only append if in starting position
                         if pos == self.startPos:
-                            print("6")
-                            moves.append(move)
+                            if gameState[move[0]][move[1]][2] == None:   
+                                print("6")
+                                moves.append(move)
+
+                        
                     elif rel in [(1,1),(-1,1),(1,-1),(-1,-1)]:
                         if gameState[move[0]][move[1]][2] != None:
                             color = gameState[move[0]][move[1]][2].color

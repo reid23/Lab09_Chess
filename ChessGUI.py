@@ -70,6 +70,8 @@ class ChessGUI:
 
         self.clickedLitPiece = False
 
+        self.newMessage = ""
+
     
     def resetGame(self):
         """Draws the starting board, resets the game
@@ -100,6 +102,7 @@ class ChessGUI:
         self.curPlayer = True
         self.hasSelected = False
         self.clickedLitPiece = False
+        self.updatePrompt("Welcome to a new game of chess! It is white's turn.")
 
 
     def updatePrompt(self, msg : str) -> None:
@@ -110,17 +113,20 @@ class ChessGUI:
         """
         l = len(msg)
         prev = 0
-        cur = 70
+        cur = 65
         s = ""
         while cur < l:
             s += msg[prev:cur]
-            if msg[cur] != " ":
+            if cur-1 >= 0 and msg[cur-1] == " ":
+                s+="\n"
+            elif msg[cur] != " ":
                 s+="-"
+                s+="\n"
             else:
                 cur+=1
-            s+="\n"
+                s+="\n"
             prev = cur
-            cur += 70
+            cur += 65
         s+=msg[prev:]
         self.prompt.setText(s) # TODO: fix length of message, needs to wrap :)
     
@@ -163,9 +169,17 @@ class ChessGUI:
         if curPos in self.curLitUp:
             self.clickedLitPiece = True
             # move that piece there!
+            prevPiece = self.chessBoard.getThing(curPos[0],curPos[1], 2)
             self.chessBoard.putThing(self.chessBoard.getThing(self.origPiecePos[0],self.origPiecePos[1], 2), curPos, 'piece')
             self.chessBoard.getThing(self.origPiecePos[0],self.origPiecePos[1], 2).setPos(self.origPiecePos,curPos)
             self.chessBoard.putThing(None, self.origPiecePos, 'piece')
+            if prevPiece == None:
+                self.newMessage = "White" if self.curPlayer else "Black"
+                self.newMessage += " moved " + self.chessBoard.getThing(curPos[0],curPos[1], 2).getType() + " to " + chr(ord('a')+curPos[0]) + str(curPos[1] + 1) + "."
+            else:
+                self.newMessage = "White's " if self.curPlayer else "Black's "
+                self.newMessage += self.chessBoard.getThing(curPos[0],curPos[1], 2).getType() + " captured " + "Black's " if self.curPlayer else "White's "
+                self.newMessage += prevPiece.getType() + " at " + chr(ord('a')+curPos[0]) + str(curPos[1] + 1) + "."
             for pos in self.curLitUp:
                 self.chessBoard.putThing(False, pos, 'lit')
             self.curLitUp = []
@@ -176,6 +190,11 @@ class ChessGUI:
             self.curLitUp = []
         
         if self.chessBoard.getThing(curX,curY,2) == None:
+            if self.hasSelected:
+                self.newMessage = "That is not a valid move."
+                self.newMessage += " Please click on a white piece." if self.curPlayer else "Please click on a black piece."
+            else:
+                self.newMessage = "Please click on a " + "white piece." if self.curPlayer else "black piece"
             self.hasSelected = False
             if self.clickedLitPiece: # already clicked a lit piece
                 for pos in self.curLitUp:
@@ -185,11 +204,20 @@ class ChessGUI:
         if self.chessBoard.getThing(curX,curY,2).color == self.curPlayer:
             self.hasSelected = True
             self.origPiecePos = curPos
+            self.newMessage = "White " if self.curPlayer else "Black "
+            self.newMessage += "has selected " + self.chessBoard.getThing(curPos[0],curPos[1], 2).getType() + " at " + chr(ord('a')+curPos[0]) + str(curPos[1] + 1) + " to move."
             if self.clickedLitPiece: # already clicked a lit piece
                 for pos in self.curLitUp:
                     self.chessBoard.putThing(False, pos, 'lit')
             self.curLitUp = self.chessBoard.lightUpSquares((curX,curY))
+            if len(self.curLitUp) == 0:
+                self.newMessage = "That piece does not have any legal moves. Please pick another piece"
+            else:
+                self.newMessage += " Please select a move from the indicated options."
+            self.updatePrompt(self.newMessage)
             return True
+
+
         return False
         
 
@@ -206,12 +234,10 @@ class ChessGUI:
             self.done = True
             self.win.close()
             return
-        
-        if self.replayButton.clicked(pt):
+        elif self.replayButton.clicked(pt):
             self.done = False
             self.resetGame()
-
-        if self.coordClicked(pt):
+        elif self.coordClicked(pt):
             # next step of turn is to choose square... idk just a progression of steps for turn
             # 1) select piece to move
             # 2) select place to move that piece
@@ -225,11 +251,16 @@ class ChessGUI:
                 self.hasSelected = False
                 self.clickedLitPiece = False
                 self.curPlayer = not self.curPlayer
+                if self.curPlayer:
+                    self.updatePrompt(self.newMessage+" It is white's turn!")
+                else:
+                    self.updatePrompt(self.newMessage+" It is black's turn!")
                 print("CHANGED PLAYER")
         else:
             print("has selected a piece:", self.hasSelected)
             print("has clicked a piece:", self.clickedLitPiece)
             print("cur player:", self.curPlayer)
+            self.updatePrompt(self.newMessage)
             for pos in self.curLitUp:
                 self.chessBoard.putThing(False, pos, 'lit')
             self.hasSelected = False

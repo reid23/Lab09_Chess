@@ -30,8 +30,10 @@ class Queen (ChessPiece):
                 if self.withinBounds(move):
                     if gameState[move[0]][move[1]][2] != None:
                         color = gameState[move[0]][move[1]][2].color
-                        if color == self.color:
-                            break # no need to continue in this direction
+                        if color != self.color:
+                            if (not self.checkCheck(gameState, pos, move, self.color)):
+                                moves.append(move)
+                        break # no need to continue in this direction
                     
                     # if move does not cause a checkmate
                     if (not self.checkCheck(gameState, pos, move, self.color)):
