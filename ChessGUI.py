@@ -178,7 +178,7 @@ class ChessGUI:
             self.chessBoard.putThing(None, self.origPiecePos, 'piece')
             if prevPiece == None:
                 self.newMessage = "White" if self.curPlayer else "Black"
-                self.newMessage += " moved " + self.chessBoard.getThing(curPos[0],curPos[1], 2).getType() + " to " + chr(ord('a')+curPos[0]) + str(curPos[1] + 1) + "."
+                self.newMessage += f" moved {self.chessBoard.getThing(*curPos, 2).__class__.__name__} to {chr(ord('a')+curPos[0])}{str(curPos[1] + 1)}."
             else:
                 self.newMessage = "White's " if self.curPlayer else "Black's "
                 self.newMessage += self.chessBoard.getThing(curPos[0],curPos[1], 2).getType() + " captured " + "Black's " if self.curPlayer else "White's "
@@ -192,7 +192,7 @@ class ChessGUI:
                 self.chessBoard.putThing(False, pos, 'lit')
             self.curLitUp = []
         
-        if self.chessBoard.getThing(curX,curY,2) == None:
+        if self.chessBoard.getThing(*curPos,2) == None:
             if self.hasSelected:
                 self.newMessage = "That is not a valid move."
                 self.newMessage += " Please click on a white piece." if self.curPlayer else "Please click on a black piece."
@@ -226,7 +226,7 @@ class ChessGUI:
 
 
     def update(self):
-        """[summary]
+        """updates the board
 
         Returns:
             [bool]: Returns true if done

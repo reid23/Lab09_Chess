@@ -111,12 +111,11 @@ class ChessPiece(Image):
         newGameState[pos[0]][pos[1]][2] = None
         if newGameState[move[0]][move[1]][2] == None:
             return False
-        curColor = newGameState[move[0]][move[1]][2].color
         
         for x in range(8):
             for y in range(8):
                 if newGameState[x][y][2] == None or newGameState[x][y][2].color == color:
-                    continue #don't care about same color piece loL
+                    continue #don't care about same color piece lol
                 for move in newGameState[x][y][2].getAllMoves(gameState, (x,y)): # filtered for bounds already
                     if newGameState[move[0]][move[1]][2] == None:
                         continue

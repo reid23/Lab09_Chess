@@ -14,7 +14,7 @@ class Rook(ChessPiece):
     
 
     def calculatePossibleMoves(self, gameState: list, pos: tuple) -> list:
-        moves = self.getAllMoves(gameState, pos)
+        moves = self.getAllMoves(gameState)
         cp = set(tuple(moves))
         for i in moves:
             if self.checkCheck(gameState, pos, self._toGlobal(pos, i), self._color):
@@ -25,7 +25,7 @@ class Rook(ChessPiece):
     # def getAllMoves(self, pos):
         # needs to return list of possible moves only constrained by bounds (so it doesn't matter if it overtakes own piece?)
         # other option: getAllmoves given game state, which is just calculatePossibleMoves but WITHOUT using checkCheck...
-    def getAllMoves(self, gameState, pos):
+    def getAllMoves(self, gameState):
             """Returns all possible moves
 
             Args:
@@ -57,8 +57,14 @@ class Rook(ChessPiece):
                     if thing.color==self._color:
                         movSet.remove(mov)
                         counter=1
+
+                        #this while loop just removes all moves that are beyond this point
+                        #like if there's a piece in this move, then all moves past this move should be deleted
                         while True:
                             try:
+                                #ok heres the confuzzlement line
+
+                                #  remove          (0,  curY +- counter)          if current move's x is 0  otherwise remove   (curX +- counter, 0)  instead
                                 movSet.remove(((0, mov[1]+ (mov[1]/abs(mov[1]))*counter) if mov[0]==0 else (mov[0]+(mov[0]/abs(mov[0]))*counter, 0)))
                             except:
                                 break

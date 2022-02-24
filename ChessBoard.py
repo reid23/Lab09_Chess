@@ -269,7 +269,7 @@ class Board:
             return
         # rule=lambda x: x in self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('all'), (curX, curY))
         # self.putThingRule(True, rule, thingType='lit')
-        moves = self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('all'), (curX, curY))
+        moves = self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('all'), clickedSquare)
         print(moves)
         for move in moves:
             self.putThing(True, move, 'lit')
