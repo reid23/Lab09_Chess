@@ -1,6 +1,5 @@
 # Pawn Chess Piece
 from ChessPiece import ChessPiece
-from King import King
 
 class Rook(ChessPiece):
     def __init__(self, color, pos: tuple, startPos: tuple):
@@ -15,7 +14,7 @@ class Rook(ChessPiece):
     
 
     def calculatePossibleMoves(self, gameState: list, pos: tuple) -> list:
-        moves = self.getAllMoves(gameState, pos)
+        moves = self.getAllMoves(gameState)
         cp = set(tuple(moves))
         for i in moves:
             if self.checkCheck(gameState, pos, self._toGlobal(pos, i), self._color):
@@ -26,7 +25,7 @@ class Rook(ChessPiece):
     # def getAllMoves(self, pos):
         # needs to return list of possible moves only constrained by bounds (so it doesn't matter if it overtakes own piece?)
         # other option: getAllmoves given game state, which is just calculatePossibleMoves but WITHOUT using checkCheck...
-    def getAllMoves(self, gameState, pos):
+    def getAllMoves(self, gameState):
             """Returns all possible moves
 
             Args:
@@ -51,24 +50,34 @@ class Rook(ChessPiece):
                     movSet.remove(mov)
                     continue
 
-                match gameState[move[0]][move[1]][2]:
-                    case ChessPiece(color=self._color):
+                thing = gameState[move[0]][move[1]][2]
+                if thing==None:
+                    continue
+                if isinstance(thing, ChessPiece):
+                    if thing.color==self._color:
                         movSet.remove(mov)
-                        for i in list(movSet):
-                            match i:
-                                case (0, y) if mov[0]==0 and y/abs(y)==mov[1]/abs(mov[1]) and y>mov[1]:
-                                    movSet.remove(i)
-                                case (x, 0) if mov[1]==0 and x/abs(x)==mov[0]/abs(mov[0]) and x>mov[0]:
-                                    movSet.remove(i)
+                        counter=1
 
-                    case ChessPiece(color=color) if color!=self._color:
-                        for i in list(movSet):
-                            match i:
-                                case (0, y) if mov[0]==0 and y/abs(y)==mov[1]/abs(mov[1]) and y>mov[1]:
-                                    movSet.remove(i)
-                                case (x, 0) if mov[1]==0 and x/abs(x)==mov[0]/abs(mov[0]) and x>mov[0]:
-                                    movSet.remove(i)
-                    
+                        #this while loop just removes all moves that are beyond this point
+                        #like if there's a piece in this move, then all moves past this move should be deleted
+                        while True:
+                            try:
+                                #ok heres the confuzzlement line
+
+                                #  remove          (0,  curY +- counter)          if current move's x is 0  otherwise remove   (curX +- counter, 0)  instead
+                                movSet.remove(((0, mov[1]+ (mov[1]/abs(mov[1]))*counter) if mov[0]==0 else (mov[0]+(mov[0]/abs(mov[0]))*counter, 0)))
+                            except:
+                                break
+                            counter += 1
+                    else:
+                        counter = 1
+                        while True:
+                            try:
+                                movSet.remove(((0, mov[1]+ (mov[1]/abs(mov[1]))*counter) if mov[0]==0 else (mov[0]+(mov[0]/abs(mov[0]))*counter, 0)))
+                            except:
+                                break
+                            counter += 1
+                
             return list(movSet)
 
 
