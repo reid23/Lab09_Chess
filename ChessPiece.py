@@ -42,7 +42,7 @@ class ChessPiece(Image):
     
     def setPos(self, oldPos, newPos):
         self._curPos = (int(newPos[0]), int(newPos[1]))
-        print("))))))))))))))))))))", newPos, "(((((((((((((((", oldPos)
+        # print("))))))))))))))))))))", newPos, "(((((((((((((((", oldPos)
         self._move((newPos[0]-oldPos[0])*10, (newPos[1]-oldPos[1])*10, False)
     
     @property
