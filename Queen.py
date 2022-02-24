@@ -25,7 +25,7 @@ class Queen (ChessPiece):
         moves = []
         for rel in self.rules:
             for i in range(1,8): # as far as the Queen wants bc powerful!
-                move = (pos[0]+rel[0]*i, pos[1]+rel[1]*i) 
+                move = (pos[0]+rel[0]*i, pos[1]+rel[1]*i) #convert to absolute position
                 # if both withiin bounds and overtakes an empty or diifferent color piece
                 if self.withinBounds(move):
                     if gameState[move[0]][move[1]][2] != None:

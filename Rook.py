@@ -6,41 +6,27 @@ class Rook(ChessPiece):
         super().__init__(color, pos, startPos)
 
         self.rules=(
-            tuple((0, i) for i in range(8)), 
-            tuple((0, i) for i in range(0, -8, -1)), 
-            tuple((i, 0) for i in range(8)), 
-            tuple((i, 0) for i in range(0, -8, -1)),
+            tuple((0, i) for i in range(8))+
+            tuple((0, i) for i in range(0, -8, -1))+
+            tuple((i, 0) for i in range(8))+
+            tuple((i, 0) for i in range(0, -8, -1))
         )
     
 
     def calculatePossibleMoves(self, gameState: list, pos: tuple) -> list:
-        nxs, nys, pxs, pys = (list(i) for i in self.rules)
 
-        #need to check:
-        #   is spot occupied by own color piece
-        #   is spot blocked by any piece
-        #   self.checkCheck
-        #   within bounds
-        return[]
-        for counter, mov in enumerate(nxs):
-            if not self.withinBounds(self._toGlobal(pos, mov)): #if the move is outside the board...
-                del nxs[counter+1:]
-                break
-            if isinstance(gameState[mov[0]][mov[1]][2], ChessPiece):
-                del nxs[counter+1:] #remove all moves blocked by this piece
-                if gameState[mov[0]][mov[1]][2].color==self.color or self.checkCheck(gameState, pos, mov, self._color):
-                    del nxs[counter] #delete this space too if it's the same color as me or if it would cause a checkmate
-                break #then break, no more deciding to do for this section
-            if self.checkCheck(gameState, pos, mov, self._color): #even if it's not a piece, we shouldn't allow check/checkmate
-                del nxs[counter]
-                continue
-            
-        return list(set(tuple(nxs)+tuple(nys)+tuple(pxs)+tuple(pys))) #make tuple to make hashable, make set and back to remove duplicates
+        moves = self.getAllMoves(gameState)
+        cp = set(tuple(moves))
+        for i in moves:
+            if self.checkCheck(gameState, pos, self._toGlobal(pos, i), self._color):
+                cp.remove(i)
+        
+        return list(self._toGlobal(pos, i) for i in cp)
       
     # def getAllMoves(self, pos):
         # needs to return list of possible moves only constrained by bounds (so it doesn't matter if it overtakes own piece?)
         # other option: getAllmoves given game state, which is just calculatePossibleMoves but WITHOUT using checkCheck...
-    def getAllMoves(self, gameState, pos):
+    def getAllMoves(self, gameState):
             """Returns all possible moves
 
             Args:
@@ -51,30 +37,80 @@ class Rook(ChessPiece):
                 list of moves (filters out of bounds)
             """
 
-            nxs, nys, pxs, pys = (list(i) for i in self.rules)
+            moves = self.rules
+            movSet = set(moves)
+            movSet.remove((0,0))
+            moves = tuple(movSet)
+            for mov in moves:
+                if not mov in movSet:
+                    continue
 
-            #need to check:
-            #   is spot occupied by own color piece
-            #   is spot blocked by any piece
-            #   self.checkCheck
-            #   within bounds
-            return []
-            for moves in [nxs, nys, pxs, pys]:
-                for counter, mov in enumerate(moves):
-                    if not self.withinBounds(self._toGlobal(pos, mov)): #if the move is outside the board...
-                        del nxs[counter+1:]
-                        break
-                    if isinstance(gameState[mov[0]][mov[1]][2], ChessPiece):
-                        del nxs[counter+1:] #remove all moves blocked by this piece
-                        if gameState[mov[0]][mov[1]][2].color==self.color:
-                            del nxs[counter] #delete this space too if it's the same color as me or if it would cause a checkmate
-                        break #then break, no more deciding to do for this section
-                    if self.checkCheck(gameState, pos, mov): #even if it's not a piece, we shouldn't allow check/checkmate
-                        del nxs[counter]
-                        continue
-            
+                move=self._toGlobal(self._curPos, mov)
+
+                if not self.withinBounds(move):
+                    movSet.remove(mov)
+                    continue
+
+                thing = gameState[move[0]][move[1]][2]
+                if thing==None:
+                    continue
+                if isinstance(thing, ChessPiece):
+                    if thing.color==self._color:
+                        movSet.remove(mov)
+                        counter=1
+
+                        #this while loop just removes all moves that are beyond this point
+                        #like if there's a piece in this move, then all moves past this move should be deleted
+                        while True:
+                            try:
+                                #ok heres the confuzzlement line
+
+                                #  remove          (0,  curY +- counter)          if current move's x is 0  otherwise remove   (curX +- counter, 0)  instead
+                                movSet.remove(((0, mov[1]+ (mov[1]/abs(mov[1]))*counter) if mov[0]==0 else (mov[0]+(mov[0]/abs(mov[0]))*counter, 0)))
+                            except:
+                                break
+                            counter += 1
+                    else:
+                        counter = 1
+                        while True:
+                            try:
+                                movSet.remove(((0, mov[1]+ (mov[1]/abs(mov[1]))*counter) if mov[0]==0 else (mov[0]+(mov[0]/abs(mov[0]))*counter, 0)))
+                            except:
+                                break
+                            counter += 1
                 
-            return list(set(tuple(nxs)+tuple(nys)+tuple(pxs)+tuple(pys)))
+            return list(movSet)
+
+
+                    
+
+
 
     def getType(self) -> str:
         return "Rook"
+
+
+#%%
+class foo:
+    def __init__(self, bar):
+        self.bar=bar
+        self.banana=True
+
+class sub_foo(foo):
+    def __init__(self, bar, bar2):
+        super().__init__(bar)
+        self.bar2=bar2
+
+
+# %%
+var=sub_foo(1,2)
+match var:
+    case None:
+        print('ooooh')
+    case foo(bar=2):
+        print('foo(1)')
+    case sub_foo(bar=2,bar2=2):
+        print('sub_foo(1,2)')
+    case foo(bar=1, banana=val) if val!=False:
+        print('banana')
+# %%

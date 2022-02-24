@@ -67,7 +67,7 @@ class ChessPiece(Image):
         Returns:
             tuple: the end global position
         """
-        return tuple(map(sum, zip(pos, mov)))
+        return (pos[0]+mov[0], pos[1]+mov[1])
         #non-vectorized expansion:
         #for i in range(len(pos)):
         # output[i] = pos[i] + mov[i]
@@ -95,6 +95,8 @@ class ChessPiece(Image):
             color (bool): the color of the current piece being moved. If own king is being 
         """
 
+
+        
         # will bring the below back once everything is merged
         newGameState = self._empty(8,8,3)
 
@@ -112,15 +114,16 @@ class ChessPiece(Image):
         if newGameState[move[0]][move[1]][2] == None:
             return False
 
-        for x in range(3):
-            for j in range(8):
-                for i in range(8):
-                    print(newGameState[i][7-j][x], end=" ")
-                print()
+#         for x in range(3):
+#             for j in range(8):
+#                 for i in range(8):
+#                     print(newGameState[i][7-j][x], end=" ")
+#                 print()
 
-            print("==================================================")
+#             print("==================================================")
         
         # newGameState[move[0]][move[1]][2].setPos(pos, move)
+
         
         curColor = newGameState[move[0]][move[1]][2].color
         print("Current COLORRRRRRR", curColor)

@@ -12,17 +12,14 @@ class King(ChessPiece):
                     (0,-1), (1,-1))
 
     def calculatePossibleMoves(self, gameState: list, pos: tuple) -> list:
-        return []
-        moves=list(self.rules)
-        for counter, mov in enumerate(moves):
-            if isinstance(gameState[mov[0]][mov[1]][2], ChessPiece):
-                if gameState[mov[0]][mov[1]][2].color==self.color or not self.checkCheck(gameState, pos, mov, self.color) or not self.withinBounds((pos[0]+mov[0], pos[1]+pos[1])):
-                    del moves[counter]
-            else:
-                if not self.checkCheck(gameState, pos, mov, self.color) or not self.withinBounds(self._toGlobal(pos, mov)):
-                    del moves[counter]
+
+        moves=self.getAllMoves(gameState, pos)
+        movSet = set(moves)
+        for mov in moves:
+            if self.checkCheck(gameState, pos, self._toGlobal(pos, mov), self._color):
+                movSet.remove(mov)
         
-        return moves
+        return tuple(self._toGlobal(pos, mov) for mov in list(movSet))
 
     def getAllMoves(self, gameState, pos):
             """Returns all possible moves
@@ -34,13 +31,18 @@ class King(ChessPiece):
             Returns:
                 list of moves (filters out of bounds)
             """
-            return []
+
             moves = []
             for rel in self.rules:
-                move = (pos[0]+rel[0], pos[1]+rel[1]) 
+                move = self._toGlobal(pos, rel)
                 # if move is within bounds
-                if self.withinBounds(move):
-                    moves.append(move)
+                if not self.withinBounds(move):
+                    continue
+                if isinstance(gameState[move[0]][move[1]][2], ChessPiece):
+                    if gameState[move[0]][move[1]][2].color!=self._color:
+                        moves.append(rel)
+                else:
+                    moves.append(rel)
 
             return moves
 
