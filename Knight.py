@@ -1,4 +1,4 @@
-# Queen Chess Piece
+# Knight Chess Piece (Alison)
 from ChessPiece import ChessPiece 
 
 class Knight (ChessPiece):

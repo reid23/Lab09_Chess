@@ -1,4 +1,4 @@
-# Bishop Chess Piece
+# Bishop Chess Piece (Reid)
 from ChessPiece import ChessPiece
 
 class Bishop(ChessPiece):

@@ -1,3 +1,5 @@
+# Chess Board
+
 from graphics import Rectangle, Point, color_rgb
 import numpy as np #only needed for test func
 import os
@@ -73,8 +75,6 @@ class Board:
             self.gameState=board
         else:
             self.gameState = self._empty(8,8,3)
-            # for p in pieces:
-                # self.putThing(p, p.startPos) #add this to pieces
             for x, y in [[x, y] for x in range(8) for y in range(8)]:
                 r = Rectangle(Point(10*x,10*y), Point(10*(x+1),10*(y+1)))
                 r.setOutline("white")
@@ -98,7 +98,6 @@ class Board:
     def copy(self):
         return Board(self.getGameState('piecesOnBoard'), board=self.getGameState('allCopy'))
     
-
 
     def checkCheck(self, moves: list, colorToCheck: bool, curPos: tuple) -> bool:
         movSet=set(moves)
@@ -133,7 +132,6 @@ class Board:
         whiteCheckmate = True
         blackCheckmate = True
 
-
         for y in range(8):
             for x in range(8):
                 if self.getThing(x,y,2) != None:
@@ -149,9 +147,7 @@ class Board:
         if whiteCheckmate:
             return True, False # white is checkmated, black woon
 
-        return False, False #meh don't care who "wins" because no checkmate
-                         
-                
+        return False, False #meh don't care who "wins" because no checkmate    
 
     def changeToQueenAt(self, pos):
         """Change given position to a queen. Used when pawn gets to the end of the board!
@@ -164,10 +160,8 @@ class Board:
         origPiece = self.getThing(x,y,2)
         if origPiece == None:
             return
-        # print("alsdfja;sldkfja;sldkfja;slkdfjas;ldkfj", origPiece)
         color = origPiece.color
         self.putThing(Queen(color,pos,pos),pos,'piece')
-
 
     def reset(self):
         for x, y in [[x, y] for x in range(8) for y in range(8)]:
@@ -178,11 +172,8 @@ class Board:
             
         self.gameState = self._empty(8,8,3)
         for p in self._initPieces:
-            # print("----f-ads;lfjkasdflk",p)
             self.putThing(p.copy(), p.curPos) #add this to pieces
-            # print(p, p.curPos,self.gameState[p.curPos[0]][p.curPos[1]][2])
 
-        # print("+++++++++++++")
         for x, y in [[x, y] for x in range(8) for y in range(8)]:
             r = Rectangle(Point(10*x,10*y), Point(10*(x+1),10*(y+1)))
             r.setOutline("white")
@@ -205,8 +196,6 @@ class Board:
         Returns:
             list: the current game state, a list of shape (8, 8, 3).  the 3 may be a 1 or 2 if less elements are requested.
         """
-        # if not elements=='all':
-        #     raise NotImplemented('sorry havent implemented this yet, will do soon')
         match elements:
             case 'all':
                 return self.gameState.copy()
@@ -228,21 +217,13 @@ class Board:
                 return self.gameState[1]
             case 'piecesOnBoard':
                 copyPieces = self._empty(8,8)
-                # print(copyPieces)
-                # for i in range(8):
-                #     for j in range(8):
-                #         print(i,j)
-                #         print(copyPieces[i][j])
                 for i in range(8):
                     for j in range(8):
-                        # print(i,j)
                         if (self.gameState[i][j][2] != None):
                             copyPieces[i][j] = self.gameState[i][j][2].copy()
                 return copyPieces
             case 'pieces':
                 return self.pieces
-
-
 
         return self.gameState
 
@@ -336,7 +317,6 @@ class Board:
             for j in range(8):
                 # check lit squares
                 if other.getThing(i, j, 1) != self.gameState[i][j][1]:
-                    # print(i,j,other.getThing(i, j, 1), self.gameState[i][j][1])
                     output.append(((i, j, 1), self.gameState[i][j][1]))
                 # only if both are not none
                 if not (other.getThing(i, j, 2) == None and self.gameState[i][j][2] == None):
@@ -513,11 +493,6 @@ class Board:
 
         self.n+=1
         return output
-
-
-
-
-
 
 
 

@@ -1,4 +1,4 @@
-# A general chess piece
+# A general chess piece (Reid)
 from tkinter import E
 from graphics import Image, Point
 
@@ -43,7 +43,6 @@ class ChessPiece(Image):
     
     def setPos(self, oldPos, newPos):
         self._curPos = (int(newPos[0]), int(newPos[1]))
-        # print("))))))))))))))))))))", newPos, "(((((((((((((((", oldPos)
         self._move((newPos[0]-oldPos[0])*10, (newPos[1]-oldPos[1])*10, False)
     
     @property
@@ -94,8 +93,6 @@ class ChessPiece(Image):
             move (tuple (a, b) where a and b are int): Represents a possible position after a move
             color (bool): the color of the current piece being moved. If own king is being 
         """
-
-
         
         # will bring the below back once everything is merged
         newGameState = self._empty(8,8,3)

@@ -1,4 +1,4 @@
-# Pawn Chess Piece
+# Rook Chess Piece (Reid)
 from ChessPiece import ChessPiece
 
 class Rook(ChessPiece):
@@ -23,10 +23,6 @@ class Rook(ChessPiece):
         
         return list(self._toGlobal(pos, i) for i in cp)
       
-    # def getAllMoves(self, pos):
-        # needs to return list of possible moves only constrained by bounds (so it doesn't matter if it overtakes own piece?)
-        # other option: getAllmoves given game state, which is just calculatePossibleMoves but WITHOUT using checkCheck...
-    
     def getAllMoves(self, gameState, pos):
             """Returns all possible moves
 

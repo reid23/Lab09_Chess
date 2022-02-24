@@ -1,4 +1,4 @@
-# Queen Chess Piece
+# Queen Chess Piece (Alison)
 from ChessPiece import ChessPiece # remove later
 
 class Queen (ChessPiece):

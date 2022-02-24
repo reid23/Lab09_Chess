@@ -1,4 +1,4 @@
-# King Chess Piece
+# King Chess Piece (Reid)
 #%%
 from ChessPiece import ChessPiece
 from graphics import *
