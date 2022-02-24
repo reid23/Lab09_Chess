@@ -123,7 +123,65 @@ class Board:
         for i in self.__call__(thing='piecesInBoard', descriminator = lambda x: (not x.color)==colorToCheck):
             if kingPos in map(sum, zip(i.getAllMoves(self.gameState, kingPos), i.curPos*len(i.getAllMoves(self.gameState, kingPos)))): #convert to global coords
                 return False
+            
+    def checkCheckmate(self):
+        """Checks if checkmate. True if checkmate, false if not
 
+        Returns:
+            bool: yeet
+        """
+        whiteCheckmate = False
+        blackCheckmate = False
+
+        placesCheckmateWhiteKing = []
+        placesCheckmateBlackKing = []
+
+        whiteMoveCount = 0
+        blackMoveCount = 0
+
+
+        whiteMoves = []
+        blackMoves = []
+        for x in range(8):
+            for y in range(8):
+
+                if self.getThing(x,y,2) != None:
+                    if self.getThing(x,y,2).color: # white
+                        for move in self.getThing(x,y,2).getAllMoves(self.getGameState('allCopy'), (x,y)):
+                            whiteMoves.append(move)
+                    else: # black
+                        for move in self.getThing(x,y,2).getAllMoves(self.getGameState('allCopy'), (x,y)):
+                            blackMoves.append(move)
+
+                # check if white checkmate by black
+                if self.getThing(x,y,2) != None and self.getThing(x,y,2).color == False:
+                    if self.getThing(x,y,2).checkCheck(self.getGameState('allCopy'), (x,y), (x,y), False):
+                        # if it causes a check
+                        placesCheckmateWhiteKing.append((x,y))
+                
+                 # check if black checkmate by white
+                if self.getThing(x,y,2) != None and self.getThing(x,y,2).color == True:
+                    if self.getThing(x,y,2).checkCheck(self.getGameState('allCopy'), (x,y), (x,y), False):
+                        # if it causes a check
+                        placesCheckmateBlackKing.append((x,y))
+
+        if len(placesCheckmateWhiteKing) > 1:
+            return True, False # black wins
+                    
+        if len(placesCheckmateBlackKing) > 1:
+            return True, False # white wins
+
+        for mv in placesCheckmateWhiteKing:
+            if not (mv in whiteMoves):
+                return True, False # black wins
+        
+        for mv in placesCheckmateBlackKing:
+            if not (mv in blackMoves):
+                return True, True # white wins
+        
+        return False, False #meh don't care who "wins" because no checkmate
+                         
+                
 
     def changeToQueenAt(self, pos):
         """Change given position to a queen. Used when pawn gets to the end of the board!

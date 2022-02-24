@@ -241,7 +241,16 @@ class ChessGUI:
             [bool]: Returns true if done
         """
         pt = self.win.getMouse()
-        
+        cont = True
+        end, winner = self.chessBoard.checkCheckmate()
+        if end:
+            if winner:
+                self.newMessage = "White won! Black king is in checkmate."
+            else:
+                self.newMessage = "Black won! White king is in checkmate."
+            self.updatePrompt(self.newMessage)
+            cont = False
+
         if self.quitButton.clicked(pt):
             self.done = True
             self.win.close()
@@ -249,7 +258,7 @@ class ChessGUI:
         elif self.replayButton.clicked(pt):
             self.done = False
             self.resetGame()
-        elif self.coordClicked(pt):
+        elif self.coordClicked(pt) and cont:
             # next step of turn is to choose square... idk just a progression of steps for turn
             # 1) select piece to move
             # 2) select place to move that piece

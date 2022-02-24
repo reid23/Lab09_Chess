@@ -12,6 +12,7 @@ class King(ChessPiece):
                     (0,-1), (1,-1))
 
     def calculatePossibleMoves(self, gameState: list, pos: tuple) -> list:
+
         moves=self.getAllMoves(gameState, pos)
         movSet = set(moves)
         for mov in moves:
@@ -30,6 +31,7 @@ class King(ChessPiece):
             Returns:
                 list of moves (filters out of bounds)
             """
+
             moves = []
             for rel in self.rules:
                 move = self._toGlobal(pos, rel)

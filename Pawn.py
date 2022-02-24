@@ -36,10 +36,14 @@ class Pawn(ChessPiece):
                 # if move does not cause a checkmate and is not something of the same color
                 if (not self.checkCheck(gameState, pos, move, self.color)):
                     # if special move
-                    if rel == (0,2) or rel == (0,-2):
+                    if rel == (0,2):
                         # only append if in starting position
                         if pos == self.startPos:
-                            if gameState[move[0]][move[1]][2] == None:   
+                            if gameState[move[0]][move[1]][2] == None and gameState[move[0]][move[1]-1][2] == None:   
+                                moves.append(move)
+                    elif rel == (0,-2):
+                        if pos == self.startPos:
+                            if gameState[move[0]][move[1]][2] == None and gameState[move[0]][move[1]+1][2] == None:   
                                 moves.append(move)
                     elif rel in [(1,1),(-1,1),(1,-1),(-1,-1)]:
                         if gameState[move[0]][move[1]][2] != None:

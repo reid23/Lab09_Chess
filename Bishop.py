@@ -47,6 +47,7 @@ class Bishop(ChessPiece):
         Returns:
             list of moves (filters out of bounds)
         """
+        
         moves = []
         for rel in self.rules:
             for i in range(1,8): # as far as the Queen wants bc powerful!

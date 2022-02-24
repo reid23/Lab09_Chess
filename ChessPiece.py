@@ -1,4 +1,5 @@
 # A general chess piece
+from tkinter import E
 from graphics import Image, Point
 
 class ChessPiece(Image):
@@ -98,37 +99,51 @@ class ChessPiece(Image):
         
         # will bring the below back once everything is merged
         newGameState = self._empty(8,8,3)
-    
-        for x in range(2):
+
+        for x in range(3):
             for i in range(8):
                 for j in range(8):
-                    newGameState[i][j][x] = gameState[i][j][x]
-        for i in range(8):
-            for j in range(8):
-                if (newGameState[i][j][2] != None):
-                    newGameState[i][j][2] = gameState[i][j][2].copy()
+                    if (newGameState[i][j][x] != None and x != 1):
+                        newGameState[i][j][x] = gameState[i][j][x].copy()
+                    else:
+                        newGameState[i][j][x] = gameState[i][j][x]
 
         # replace with moved chess piece
         newGameState[move[0]][move[1]][2] = newGameState[pos[0]][pos[1]][2]
         newGameState[pos[0]][pos[1]][2] = None
         if newGameState[move[0]][move[1]][2] == None:
             return False
+
+#         for x in range(3):
+#             for j in range(8):
+#                 for i in range(8):
+#                     print(newGameState[i][7-j][x], end=" ")
+#                 print()
+
+#             print("==================================================")
         
+        # newGameState[move[0]][move[1]][2].setPos(pos, move)
+
+        
+        curColor = newGameState[move[0]][move[1]][2].color
+        print("Current COLORRRRRRR", curColor)
+            
         for x in range(8):
             for y in range(8):
                 if newGameState[x][y][2] == None or newGameState[x][y][2].color == color:
-                    continue #don't care about same color piece lol
-                for move in newGameState[x][y][2].getAllMoves(gameState, (x,y)): # filtered for bounds already
-                    if newGameState[move[0]][move[1]][2] == None:
+                    continue #don't care about same color piece loL
+                for move1 in newGameState[x][y][2].getAllMoves(newGameState, (x,y)): # filtered for bounds already
+                    if newGameState[move1[0]][move1[1]][2] == None:
                         continue
-                    nextColor = newGameState[move[0]][move[1]][2].color
-                    if nextColor == None:
-                        continue
+                    nextColor = newGameState[move1[0]][move1[1]][2].color
+                    # if nextColor == None:
+                    #     continue
                     # make sure that own king will not be in a checkmate
-                    if newGameState[move[0]][move[1]][2].getType() == "King" and nextColor == color:
+                    if newGameState[move1[0]][move1[1]][2].getType() == "King" and nextColor == color:
                         return True
         
         return False
+
 
     @staticmethod
     def _empty(*shape, initialVal=None):
