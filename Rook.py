@@ -67,7 +67,7 @@ class Rook(ChessPiece):
                         counter = 1
                         while True:
                             try:
-                                movSet.remove(((0, mov[1]+ (mov[1]/abs(mov[1]))*counter) if mov[0]==0 else (mov[0]+(mov[0]/abs(mov[0]))*counter, 0)))                            except:
+                                movSet.remove(((0, mov[1]+ (mov[1]/abs(mov[1]))*counter) if mov[0]==0 else (mov[0]+(mov[0]/abs(mov[0]))*counter, 0)))
                             except:
                                 break
                             counter += 1
