@@ -1,6 +1,5 @@
 # Pawn Chess Piece
 from ChessPiece import ChessPiece
-from King import King
 
 class Rook(ChessPiece):
     def __init__(self, color, pos: tuple, startPos: tuple):
@@ -51,24 +50,28 @@ class Rook(ChessPiece):
                     movSet.remove(mov)
                     continue
 
-                match gameState[move[0]][move[1]][2]:
-                    case ChessPiece(color=self._color):
+                thing = gameState[move[0]][move[1]][2]
+                if thing==None:
+                    continue
+                if isinstance(thing, ChessPiece):
+                    if thing.color==self._color:
                         movSet.remove(mov)
-                        for i in list(movSet):
-                            match i:
-                                case (0, y) if mov[0]==0 and y/abs(y)==mov[1]/abs(mov[1]) and y>mov[1]:
-                                    movSet.remove(i)
-                                case (x, 0) if mov[1]==0 and x/abs(x)==mov[0]/abs(mov[0]) and x>mov[0]:
-                                    movSet.remove(i)
-
-                    case ChessPiece(color=color) if color!=self._color:
-                        for i in list(movSet):
-                            match i:
-                                case (0, y) if mov[0]==0 and y/abs(y)==mov[1]/abs(mov[1]) and y>mov[1]:
-                                    movSet.remove(i)
-                                case (x, 0) if mov[1]==0 and x/abs(x)==mov[0]/abs(mov[0]) and x>mov[0]:
-                                    movSet.remove(i)
-                    
+                        counter=1
+                        while True:
+                            try:
+                                movSet.remove(((0, mov[1]+ (mov[1]/abs(mov[1]))*counter) if mov[0]==0 else (mov[0]+(mov[0]/abs(mov[0]))*counter, 0)))
+                            except:
+                                break
+                            counter += 1
+                    else:
+                        counter = 1
+                        while True:
+                            try:
+                                movSet.remove(((0, mov[1]+ (mov[1]/abs(mov[1]))*counter) if mov[0]==0 else (mov[0]+(mov[0]/abs(mov[0]))*counter, 0)))                            except:
+                            except:
+                                break
+                            counter += 1
+                
             return list(movSet)
 
 

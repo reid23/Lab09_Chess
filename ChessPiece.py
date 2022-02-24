@@ -66,7 +66,7 @@ class ChessPiece(Image):
         Returns:
             tuple: the end global position
         """
-        return tuple(map(sum, zip(pos, mov)))
+        return (pos[0]+mov[0], pos[1]+mov[1])
         #non-vectorized expansion:
         #for i in range(len(pos)):
         # output[i] = pos[i] + mov[i]
