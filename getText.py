@@ -1,5 +1,6 @@
 #%%
 import requests
+from random import randint
 #%%
 response = requests.get(
     'https://en.wikipedia.org/w/api.php',
@@ -12,4 +13,13 @@ response = requests.get(
     }
 ).json()
 
-print(response.keys())
+text=response['query']['pages']['5134']['extract'].split(' ')
+
+print(len(text))
+
+# %%
+def getSnippet(text, length=11963, snippetSize=43):
+    r=randint(0, length-snippetSize)
+    return ' '.join(text[r:r+snippetSize]).remove('\n')
+
+# %%
