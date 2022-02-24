@@ -1,4 +1,4 @@
-# Pawn Chess Piece
+# Pawn Chess Piece (Alison)
 from ChessPiece import ChessPiece # remove later
 
 class Pawn(ChessPiece):
