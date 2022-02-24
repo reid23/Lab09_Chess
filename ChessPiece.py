@@ -94,6 +94,8 @@ class ChessPiece(Image):
             color (bool): the color of the current piece being moved. If own king is being 
         """
 
+
+        
         # will bring the below back once everything is merged
         newGameState = self._empty(8,8,3)
     

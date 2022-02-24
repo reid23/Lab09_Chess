@@ -1,6 +1,7 @@
 from graphics import Rectangle, Point, color_rgb
 import numpy as np #only needed for test func
 import os
+from ChessPiece import ChessPiece
 from Pawn import Pawn
 from Queen import Queen
 from Knight import Knight
@@ -97,35 +98,31 @@ class Board:
     def copy(self):
         return Board(self.getGameState('piecesOnBoard'), board=self.getGameState('allCopy'))
     
-    def checkCheckGivenMov(self, piece, mov):
-        """checks if a $piece can do a $movement without creating a check
 
-        Args:
-            piece (piece object): the piece to check
-            movement (tuple): the RELATIVE movement
-        """
-        newBoard = self.copy()
-        pos = newBoard.unPutThing(piece, actuallyRemove=True)
-        pos = (pos[0]+mov[0], pos[1]+mov[1]) #convert to absolute
-        newBoard.putThing(piece, pos)
-        newBoard.checkCheck(not piece.color)
 
-    def checkCheck(self, colorToCheck: bool) -> bool:
-        kingPos = (0,0)
+    def checkCheck(self, moves: list, colorToCheck: bool, curPos: tuple) -> bool:
+        movSet=set(moves)
+        for mov in moves:
+            newBoard=self.copy()
+            newBoard.putThing(None, curPos)
+            newBoard.putThing(self.gameState[curPos[0]][curPos[1]][2].copy(), ChessPiece._toGlobal(curPos, mov))
+            if newBoard.isInCheck(colorToCheck):
+                movSet.remove(mov)
+            del newBoard
+        return list(movSet)
+            
+
+    def isInCheck(self, color: bool):
         for i in self.__call__(thing='piecesInBoard'):
             match i:
-                case King(color=colorToCheck, pos=pos):
+                case King(color=colorToCheck, _curPos=pos) if colorToCheck==color:
                     kingPos=pos
                 case _:
                     pass
+
         for i in self.__call__(thing='piecesInBoard', descriminator = lambda x: (not x.color)==colorToCheck):
-            if kingPos in i.getAllMoves(self.gameState, kingPos):
+            if kingPos in map(sum, zip(i.getAllMoves(self.gameState, kingPos), i.curPos*len(i.getAllMoves(self.gameState, kingPos)))): #convert to global coords
                 return False
-            
-
-
-
-
 
     def reset(self):
         for x, y in [[x, y] for x in range(8) for y in range(8)]:
@@ -269,7 +266,7 @@ class Board:
             return
         # rule=lambda x: x in self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('all'), (curX, curY))
         # self.putThingRule(True, rule, thingType='lit')
-        moves = self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('all'), clickedSquare)
+        moves = self.checkCheck(self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('all'), clickedSquare), self.gameState[curX][curY][2].color, (curX, curY))
         print(moves)
         for move in moves:
             self.putThing(True, move, 'lit')
