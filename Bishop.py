@@ -21,6 +21,8 @@ class Bishop(ChessPiece):
         #   self.checkCheck
         #   within bounds
 
+        return []
+
         for counter, mov in enumerate(nxs):
             if not self.withinBounds(self._toGlobal(pos, mov)): #if the move is outside the board...
                 del nxs[counter+1:]
@@ -46,6 +48,7 @@ class Bishop(ChessPiece):
         Returns:
             list of moves (filters out of bounds)
         """
+        return []
         moves = []
         for l in self.rules:
             for rel in l:

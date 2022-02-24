@@ -21,7 +21,7 @@ class Rook(ChessPiece):
         #   is spot blocked by any piece
         #   self.checkCheck
         #   within bounds
-
+        return[]
         for counter, mov in enumerate(nxs):
             if not self.withinBounds(self._toGlobal(pos, mov)): #if the move is outside the board...
                 del nxs[counter+1:]
@@ -58,7 +58,7 @@ class Rook(ChessPiece):
             #   is spot blocked by any piece
             #   self.checkCheck
             #   within bounds
-
+            return []
             for moves in [nxs, nys, pxs, pys]:
                 for counter, mov in enumerate(moves):
                     if not self.withinBounds(self._toGlobal(pos, mov)): #if the move is outside the board...

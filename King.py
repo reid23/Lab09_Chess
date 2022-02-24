@@ -12,6 +12,7 @@ class King(ChessPiece):
                     (0,-1), (1,-1))
 
     def calculatePossibleMoves(self, gameState: list, pos: tuple) -> list:
+        return []
         moves=list(self.rules)
         for counter, mov in enumerate(moves):
             if isinstance(gameState[mov[0]][mov[1]][2], ChessPiece):
@@ -33,6 +34,7 @@ class King(ChessPiece):
             Returns:
                 list of moves (filters out of bounds)
             """
+            return []
             moves = []
             for rel in self.rules:
                 move = (pos[0]+rel[0], pos[1]+rel[1]) 
