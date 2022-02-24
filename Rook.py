@@ -92,26 +92,26 @@ class Rook(ChessPiece):
 
 
 #%%
-class foo:
-    def __init__(self, bar):
-        self.bar=bar
-        self.banana=True
+# class foo:
+#     def __init__(self, bar):
+#         self.bar=bar
+#         self.banana=True
 
-class sub_foo(foo):
-    def __init__(self, bar, bar2):
-        super().__init__(bar)
-        self.bar2=bar2
+# class sub_foo(foo):
+#     def __init__(self, bar, bar2):
+#         super().__init__(bar)
+#         self.bar2=bar2
 
 
 # %%
-var=sub_foo(1,2)
-match var:
-    case None:
-        print('ooooh')
-    case foo(bar=2):
-        print('foo(1)')
-    case sub_foo(bar=2,bar2=2):
-        print('sub_foo(1,2)')
-    case foo(bar=1, banana=val) if val!=False:
-        print('banana')
+# var=sub_foo(1,2)
+# match var:
+#     case None:
+#         print('ooooh')
+#     case foo(bar=2):
+#         print('foo(1)')
+#     case sub_foo(bar=2,bar2=2):
+#         print('sub_foo(1,2)')
+#     case foo(bar=1, banana=val) if val!=False:
+#         print('banana')
 # %%

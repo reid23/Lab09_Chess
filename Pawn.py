@@ -76,13 +76,29 @@ class Pawn(ChessPiece):
         moves = []
         for rel in self.rules:
             move = (pos[0]+rel[0], pos[1]+rel[1]) 
-
-            # if  within bounds
+            # if both withiin bounds and overtakes an empty or diifferent color piece
             if self.withinBounds(move):
+                if gameState[move[0]][move[1]][2] != None:
+                    color = gameState[move[0]][move[1]][2].color
+                    if color == self.color: # same color, just break
+                        continue
                 # if special move
-                if rel == (0,2) or rel == (0,-2):
+                if rel == (0,2):
                     # only append if in starting position
                     if pos == self.startPos:
+                        if gameState[move[0]][move[1]][2] == None and gameState[move[0]][move[1]-1][2] == None:   
+                            moves.append(move)
+                elif rel == (0,-2):
+                    if pos == self.startPos:
+                        if gameState[move[0]][move[1]][2] == None and gameState[move[0]][move[1]+1][2] == None:   
+                            moves.append(move)
+                elif rel in [(1,1),(-1,1),(1,-1),(-1,-1)]:
+                    if gameState[move[0]][move[1]][2] != None:
+                        color = gameState[move[0]][move[1]][2].color
+                        if color != self.color: # different color
+                            moves.append(move)
+                elif rel in [(0,1),(0,-1)]:
+                    if gameState[move[0]][move[1]][2] == None:
                         moves.append(move)
                 else:
                     moves.append(move)

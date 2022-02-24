@@ -113,20 +113,8 @@ class ChessPiece(Image):
         newGameState[pos[0]][pos[1]][2] = None
         if newGameState[move[0]][move[1]][2] == None:
             return False
-
-#         for x in range(3):
-#             for j in range(8):
-#                 for i in range(8):
-#                     print(newGameState[i][7-j][x], end=" ")
-#                 print()
-
-#             print("==================================================")
-        
-        # newGameState[move[0]][move[1]][2].setPos(pos, move)
-
         
         curColor = newGameState[move[0]][move[1]][2].color
-        print("Current COLORRRRRRR", curColor)
             
         for x in range(8):
             for y in range(8):
@@ -136,8 +124,6 @@ class ChessPiece(Image):
                     if newGameState[move1[0]][move1[1]][2] == None:
                         continue
                     nextColor = newGameState[move1[0]][move1[1]][2].color
-                    # if nextColor == None:
-                    #     continue
                     # make sure that own king will not be in a checkmate
                     if newGameState[move1[0]][move1[1]][2].getType() == "King" and nextColor == color:
                         return True

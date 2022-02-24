@@ -130,7 +130,7 @@ class ChessGUI:
             cur += 65
         s+=msg[prev:]
         self.prompt.setText(s) # TODO: fix length of message, needs to wrap :)
-        print(msg)
+        # print(msg)
     
 
     def updateWin(self):
@@ -147,9 +147,9 @@ class ChessGUI:
         #         print(self.chessBoard.getThing(i,7-j,2), end=" ")
         #     print()
 
-        print(self.chessBoard-self.prevState)
+        # print(self.chessBoard-self.prevState)
         self.drawDiff(self.chessBoard-self.prevState)
-        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        # print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
         
         self.win.update()
         
@@ -205,8 +205,6 @@ class ChessGUI:
             if self.hasSelected:
                 self.newMessage = "That is not a valid move."
                 self.newMessage += " Please click on a white piece." if self.curPlayer else " Please click on a black piece."
-            # else:
-            #     self.newMessage = "Please click on a " + "white piece." if self.curPlayer else "black piece"
             self.hasSelected = False
             if self.clickedLitPiece: # already clicked a lit piece
                 for pos in self.curLitUp:
@@ -258,7 +256,7 @@ class ChessGUI:
         elif self.replayButton.clicked(pt):
             self.done = False
             self.resetGame()
-        elif self.coordClicked(pt) and cont:
+        elif cont and self.coordClicked(pt):
             # next step of turn is to choose square... idk just a progression of steps for turn
             # 1) select piece to move
             # 2) select place to move that piece
@@ -287,7 +285,14 @@ class ChessGUI:
                 self.chessBoard.putThing(False, pos, 'lit')
             self.hasSelected = False
 
-        
+        end, winner = self.chessBoard.checkCheckmate()
+        if end:
+            if winner:
+                self.newMessage = "White won! Black king is in checkmate."
+            else:
+                self.newMessage = "Black won! White king is in checkmate."
+            self.updatePrompt(self.newMessage)
+            cont = False
         
         self.updateWin()
 
@@ -317,7 +322,7 @@ class ChessGUI:
                     curTile.draw(self.win)
                     
         for change in changes:
-            print(change, end="----")
+            # print(change, end="----")
             x = change[0][0]
             y = change[0][1]
             # print(change,end="  ")
@@ -358,17 +363,17 @@ class ChessGUI:
                 # print("____DFSDL:FKJSDL:KFJSDL:KFJL:SDKFKSDLF")
             curPiece = self.chessBoard.getThing(x,y,2)
             prevPiece = self.prevState.getThing(x,y,2)
-            print("prevPiece: ", prevPiece, curPiece)
+            # print("prevPiece: ", prevPiece, curPiece)
                 # print(curPiece, prevPiece)
             if prevPiece != None:
                 prevPiece.undraw()
-                print("undraw previous piece")
+                # print("undraw previous piece")
             if curPiece != None:
                 curPiece.undraw()
                 curPiece.draw(self.win)
-                print("draw this piece: ", curPiece)
+                # print("draw this piece: ", curPiece)
 
-            print("+============================", self.prevState.getThing(4,6,2), self.chessBoard.getThing(4,6,2))
+            # print("+============================", self.prevState.getThing(4,6,2), self.chessBoard.getThing(4,6,2))
 
           
 

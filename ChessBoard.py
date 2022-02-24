@@ -125,60 +125,30 @@ class Board:
                 return False
             
     def checkCheckmate(self):
-        """Checks if checkmate. True if checkmate, false if not
+        """Checks if checkmate. True if checkmate, false if not. Second boolean is True if white won, False if black won.
 
         Returns:
             bool: yeet
         """
-        whiteCheckmate = False
-        blackCheckmate = False
-
-        placesCheckmateWhiteKing = []
-        placesCheckmateBlackKing = []
-
-        whiteMoveCount = 0
-        blackMoveCount = 0
+        whiteCheckmate = True
+        blackCheckmate = True
 
 
-        whiteMoves = []
-        blackMoves = []
-        for x in range(8):
-            for y in range(8):
-
+        for y in range(8):
+            for x in range(8):
                 if self.getThing(x,y,2) != None:
                     if self.getThing(x,y,2).color: # white
-                        for move in self.getThing(x,y,2).getAllMoves(self.getGameState('allCopy'), (x,y)):
-                            whiteMoves.append(move)
-                    else: # black
-                        for move in self.getThing(x,y,2).getAllMoves(self.getGameState('allCopy'), (x,y)):
-                            blackMoves.append(move)
-
-                # check if white checkmate by black
-                if self.getThing(x,y,2) != None and self.getThing(x,y,2).color == False:
-                    if self.getThing(x,y,2).checkCheck(self.getGameState('allCopy'), (x,y), (x,y), False):
-                        # if it causes a check
-                        placesCheckmateWhiteKing.append((x,y))
-                
-                 # check if black checkmate by white
-                if self.getThing(x,y,2) != None and self.getThing(x,y,2).color == True:
-                    if self.getThing(x,y,2).checkCheck(self.getGameState('allCopy'), (x,y), (x,y), False):
-                        # if it causes a check
-                        placesCheckmateBlackKing.append((x,y))
-
-        if len(placesCheckmateWhiteKing) > 1:
-            return True, False # black wins
-                    
-        if len(placesCheckmateBlackKing) > 1:
-            return True, False # white wins
-
-        for mv in placesCheckmateWhiteKing:
-            if not (mv in whiteMoves):
-                return True, False # black wins
+                        if len(self.getThing(x,y,2).calculatePossibleMoves(self.getGameState('allCopy'), (x,y))) != 0:
+                            whiteCheckmate = False
+                    if not self.getThing(x,y,2).color: # black
+                        if len(self.getThing(x,y,2).calculatePossibleMoves(self.getGameState('allCopy'), (x,y))) != 0:
+                            blackCheckmate = False
         
-        for mv in placesCheckmateBlackKing:
-            if not (mv in blackMoves):
-                return True, True # white wins
-        
+        if blackCheckmate:
+            return True, True # white won
+        if whiteCheckmate:
+            return True, False # white is checkmated, black woon
+
         return False, False #meh don't care who "wins" because no checkmate
                          
                 
@@ -336,14 +306,10 @@ class Board:
     def lightUpSquares(self, clickedSquare: tuple):
         curX = clickedSquare[0]
         curY = clickedSquare[1]
-        # print("=============",self.gameState[curX][curY][2])
         if self.gameState[curX][curY][2] == None:
             return
-        # rule=lambda x: x in self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('all'), (curX, curY))
-        # self.putThingRule(True, rule, thingType='lit') 
         moves = self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('all'), clickedSquare)
-        # print(moves)
-
+  
         for move in moves:
             self.putThing(True, move, 'lit')
 
@@ -370,7 +336,7 @@ class Board:
             for j in range(8):
                 # check lit squares
                 if other.getThing(i, j, 1) != self.gameState[i][j][1]:
-                    print(i,j,other.getThing(i, j, 1), self.gameState[i][j][1])
+                    # print(i,j,other.getThing(i, j, 1), self.gameState[i][j][1])
                     output.append(((i, j, 1), self.gameState[i][j][1]))
                 # only if both are not none
                 if not (other.getThing(i, j, 2) == None and self.gameState[i][j][2] == None):

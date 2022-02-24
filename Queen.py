@@ -54,9 +54,15 @@ class Queen (ChessPiece):
         moves = []
         for rel in self.rules:
             for i in range(1,8): # as far as the Queen wants bc powerful!
-                move = (pos[0]+rel[0]*i, pos[1]+rel[1]*i) 
-                # if within bounds
+                move = (pos[0]+rel[0]*i, pos[1]+rel[1]*i) #convert to absolute position
+                # if both withiin bounds and overtakes an empty or diifferent color piece
                 if self.withinBounds(move):
+                    if gameState[move[0]][move[1]][2] != None:
+                        color = gameState[move[0]][move[1]][2].color
+                        if color != self.color:
+                            moves.append(move)
+                        break # no need to continue in this direction
+                    
                     moves.append(move)
         
         return moves
