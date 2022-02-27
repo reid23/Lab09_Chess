@@ -226,9 +226,6 @@ class Board:
                 return self.pieces
 
         return self.gameState
-
-    def test(self): #just for testing to see if correct squares are lit up
-        print(np.array([[i[1] for i in j] for j in self.gameState]))
     
     @staticmethod
     def _empty(*shape, initialVal=None):

@@ -1,14 +1,7 @@
 # Chess GUI (Alison)
 from graphics import *
-from numpy import piecewise
 from ChessBoard import Board
 from Button import Button
-from Pawn import Pawn
-from Queen import Queen
-from Knight import Knight
-from King import King
-from Bishop import Bishop
-from Rook import Rook
 from Text import getSnippet, loadWikiWords
 
 class ChessGUI:
@@ -145,17 +138,14 @@ class ChessGUI:
         return '\n'.join(lines) #convert the list of lines to a string with actual newline chars
         
 
-
-
-
-
-
     def updatePrompt(self, msg : str) -> None:
         """updates the prompt on the GUI
 
         Args:
             msg (str): new message for prompt box
         """
+        #* idk what this does
+        #* just replacing it with textWrap
         # l = len(msg)
         # prev = 0
         # cur = 65
@@ -187,15 +177,15 @@ class ChessGUI:
         curX = pt.getX()
         curY = pt.getY()
         self.newMessage = "It is White's turn! Click a white piece to move." if self.curPlayer else "It is Black's turn! Click a black piece to move."
-        if (curX < 0 or curY < 0 or curX > 80 or curY > 80):
+        if curX < 0 or curY < 0 or curX > 80 or curY > 80: #check within bounds
             return False
         curX = int(curX/10)
         curY = int(curY/10)
 
-        curPos = (int(curX), int(curY))
+        curPos = (curX, curY)
         
         
-        if curPos in self.curLitUp:
+        if curPos in self.curLitUp: 
             self.clickedLitPiece = True
             # move that piece there!
             prevPiece = self.chessBoard.getThing(curPos[0],curPos[1], 2)
