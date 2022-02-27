@@ -40,8 +40,8 @@ def loadWikiWords(file='wikiWords.csv'):
     with open(file, 'r') as f:
         return f.read().split('\n')[1:] #[1:] gets rid of leading zero from stupid pandas column labels
         #not using readLines() because that puts a bunch of \n chars in
-        
-def getSnippet(text, length=11963, snippetSize=43):
+
+def getSnippet(text, length=11963, snippetSize=45):
     r=randint(0, length-snippetSize)
     return ' '.join(text[r:r+snippetSize])
 
