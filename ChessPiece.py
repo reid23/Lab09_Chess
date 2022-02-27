@@ -67,10 +67,7 @@ class ChessPiece(Image):
             tuple: the end global position
         """
         return (pos[0]+mov[0], pos[1]+mov[1])
-        #non-vectorized expansion:
-        #for i in range(len(pos)):
-        # output[i] = pos[i] + mov[i]
-        #basically just adds elementwise
+        
 
     def calculatePossibleMoves(self, gameState: list, pos: tuple) -> list:
         """Calculates all the possible moves given the game state. Returns a list of tuples representing possible moves.
