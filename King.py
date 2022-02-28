@@ -13,38 +13,35 @@ class King(ChessPiece):
 
     def calculatePossibleMoves(self, gameState: list, pos: tuple) -> list:
 
-        moves=self.getAllMoves(gameState, pos)
-        movSet = set(moves)
-        for mov in moves:
-            if self.checkCheck(gameState, pos, self._toGlobal(pos, mov), self._color):
-                movSet.remove(mov)
-        
-        return tuple(self._toGlobal(pos, mov) for mov in list(movSet))
+        movSet = []
+        for rel in self.rules:
+            mov = (rel[0]+pos[0], rel[1]+pos[1])
+            if not self.withinBounds(mov): 
+                continue
+            if self.checkCheck(gameState, pos, mov, self._color):
+                movSet.append(mov)
+        print(self.color, movSet, "----")
+        return movSet
 
     def getAllMoves(self, gameState, pos):
-            """Returns all possible moves
+        """Returns all possible moves
 
-            Args:
-                gameState: the current game state, a list of shape (8, 8, 3)
-                pos (tuble): current position
+        Args:
+            gameState: the current game state, a list of shape (8, 8, 3)
+            pos (tuble): current position
 
-            Returns:
-                list of moves (filters out of bounds)
-            """
+        Returns:
+            list of moves (filters out of bounds)
+        """
 
-            moves = []
-            for rel in self.rules:
-                move = self._toGlobal(pos, rel)
-                # if move is within bounds
-                if not self.withinBounds(move):
-                    continue
-                if isinstance(gameState[move[0]][move[1]][2], ChessPiece):
-                    if gameState[move[0]][move[1]][2].color!=self._color:
-                        moves.append(rel)
-                else:
-                    moves.append(rel)
-
-            return moves
+        movSet = []
+        for rel in self.rules:
+            mov = (rel[0]+pos[0], rel[1]+pos[1])
+            if not self.withinBounds(mov): 
+                continue
+            movSet.append(mov)
+        # print(self.color, movSet)
+        return movSet
 
     def getType(self) -> str:
         return "King"
