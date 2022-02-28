@@ -42,8 +42,8 @@ class ChessPiece(Image):
         return isinstance(other, type(self)) and self._color==other.color and self._curPos==other.curPos
     
     def setPos(self, oldPos, newPos):
-        self._curPos = (int(newPos[0]), int(newPos[1]))
         self._move((newPos[0]-oldPos[0])*10, (newPos[1]-oldPos[1])*10, False)
+        self._curPos = (int(newPos[0]), int(newPos[1]))
     
     @property
     def curPos(self):

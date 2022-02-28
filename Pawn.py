@@ -15,6 +15,18 @@ class Pawn(ChessPiece):
         else:
             self.rules = [(0,-1),(0,-2),(1,-1),(-1,-1)]
         self.startPos = startPos
+        self.lastPos = startPos
+
+    def _move(self, x, y, absolute=True):
+        self.lastPos=self._curPos
+
+        if absolute:
+            dx, dy = x-self.anchor.getX(), y-self.anchor.getY()
+        else:
+            dx, dy = x, y
+
+        self.anchor.move(dx, dy)
+
              
     def calculatePossibleMoves(self, gameState, pos):
         """Calculates all the possible moves given the game state. Returns a list of tuples representing possible moves.
@@ -27,7 +39,7 @@ class Pawn(ChessPiece):
         moves = []
         for rel in self.rules:
             move = (pos[0]+rel[0], pos[1]+rel[1]) 
-            # if both withiin bounds and overtakes an empty or diifferent color piece
+            # if both withiin bounds and overtakes an empty or different color piece
             if self.withinBounds(move):
                 if gameState[move[0]][move[1]][2] != None:
                     color = gameState[move[0]][move[1]][2].color
@@ -46,6 +58,14 @@ class Pawn(ChessPiece):
                             if gameState[move[0]][move[1]][2] == None and gameState[move[0]][move[1]+1][2] == None:   
                                 moves.append(move)
                     elif rel in [(1,1),(-1,1),(1,-1),(-1,-1)]:
+                        #en passant
+                        #check if pawn exists in right place
+                        #check if pawn's last move was a two-move
+                        #check if pawn moved last turn
+                        #check if current position is right rank
+                        
+
+
                         if gameState[move[0]][move[1]][2] != None:
                             color = gameState[move[0]][move[1]][2].color
                             if color != self.color: # different color
@@ -55,6 +75,7 @@ class Pawn(ChessPiece):
                             moves.append(move)
                     else:
                         moves.append(move)
+                    
         
         return moves
 

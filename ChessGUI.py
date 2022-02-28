@@ -1,14 +1,7 @@
 # Chess GUI (Alison)
 from graphics import *
-from numpy import piecewise
 from ChessBoard import Board
 from Button import Button
-from Pawn import Pawn
-from Queen import Queen
-from Knight import Knight
-from King import King
-from Bishop import Bishop
-from Rook import Rook
 from Text import getSnippet, loadWikiWords
 
 class ChessGUI:

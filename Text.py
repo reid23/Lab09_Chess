@@ -14,28 +14,28 @@ import re
 import pandas as pd
 
 
-# def updateWikiWords():
-    # response = requests.get(
-    #     'https://en.wikipedia.org/w/api.php',
-    #     params={
-    #         'action': 'query',
-    #         'format': 'json',
-    #         'titles': 'Chess',
-    #         'prop': 'extracts',
-    #         'explaintext': True,
-    #     }
-    # ).json()
+def updateWikiWords():
+    response = requests.get(
+        'https://en.wikipedia.org/w/api.php',
+        params={
+            'action': 'query',
+            'format': 'json',
+            'titles': 'Chess',
+            'prop': 'extracts',
+            'explaintext': True,
+        }
+    ).json()
 
-    # text=response['query']['pages']['5134']['extract']
+    text=response['query']['pages']['5134']['extract']
 
-    # while '\n\n' in text:
-    #     text = re.sub('\n\n', '\n', text)
-    # text=text.split(' ')
+    while '\n\n' in text:
+        text = re.sub('\n\n', '\n', text)
+    text=text.split(' ')
 
-    # df=pd.DataFrame(text)
-    # df.to_csv('wikiWords.csv', index=False)
+    df=pd.DataFrame(text)
+    df.to_csv('wikiWords.csv', index=False)
 
-    # return text
+    return text
 
 def loadWikiWords(file='wikiWords.csv'):
     with open(file, 'r') as f:
