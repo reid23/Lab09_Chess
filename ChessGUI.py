@@ -9,6 +9,7 @@ from Knight import Knight
 from King import King
 from Bishop import Bishop
 from Rook import Rook
+from Text import getSnippet, loadWikiWords
 
 class ChessGUI:
     """GUI for a chess game"""
@@ -38,7 +39,8 @@ class ChessGUI:
         subtitle = Text(Point(115, 57), "a game of wit") 
         subtitle.setSize(23)
         subtitle.draw(self.win)
-        self.desc = Text(Point(115, 30), "\"a board game of strategic skill\nfor two players, played on a\ncheckered board. Each player\nbegins the game with sixteen\npieces that are moved and\nused to capture opposing\npieces according to precise\nrules. The object is to put the\nopponent's king under a direct\nattack from which escape is\nimpossible (checkmate).\"")
+        self.words=loadWikiWords()
+        self.desc = Text(Point(115, 30), '')
         self.desc.setSize(15)
         self.desc.draw(self.win)
 
@@ -62,6 +64,9 @@ class ChessGUI:
         self.resetGame()
         self.prevState = self.chessBoard.copy()
         self.updateWin()
+        self.desc.setText("\"a board game of strategic skill\nfor two players, played on a\ncheckered board. Each player\nbegins the game with sixteen\npieces that are moved and\nused to capture opposing\npieces according to precise\nrules. The object is to put the\nopponent's king under a direct\nattack from which escape is\nimpossible (checkmate).\"")
+
+
 
         # MOVE STATES
         self.hasSelected = False
@@ -100,6 +105,50 @@ class ChessGUI:
         self.newMessage = "Welcome to a new game of chess! It is White's turn."
         self.updatePrompt("Welcome to a new game of chess! It is White's turn.")
 
+    @staticmethod
+    def textWrap(text, width, center=True):
+        """wraps given text to limit line size to $width, and optionally centers the text in the lines (default left justified)
+
+        Args:
+            text (str): the input string to wrap
+            width (int): the line length limit (the max width of the text block)
+            center (bool, optional): whether to center the text. Defaults to True.
+
+        Returns:
+            str: the wrapped text
+        """
+        # there's a whole library for text wrapping
+        # but noooo we can't use it
+        # have you even read george orwell's 1984?!?! /s
+        # 
+        # seriously though :( text is pain
+        # like time zone stuff
+        # implementing it from scratch might give a deeper understanding but
+        # I'm willing to bet it'll also give me depression
+
+        # split into words, but don't remove the spaces
+        text=text.replace(' ', ' SplitHere®©™').split("SplitHere®©™") #break into words
+
+
+        lines=[''] #init lines, which will be [line_1, line_2, line_3, ..., line_n]
+        
+        for word in text:
+            if width-len(lines[-1]) >= len(word): #if there's space left in the line
+                lines[-1] = lines[-1]+word #add the word to the line
+            else:
+                lines.append(word) #else add the word to the next line
+        
+        if center:
+            for counter, line in enumerate(lines):
+                lines[counter] = line.center(width) #center each line using the str.center method, just centering to width
+
+        return '\n'.join(lines) #convert the list of lines to a string with actual newline chars
+        
+
+
+
+
+
 
     def updatePrompt(self, msg : str) -> None:
         """updates the prompt on the GUI
@@ -107,27 +156,30 @@ class ChessGUI:
         Args:
             msg (str): new message for prompt box
         """
-        l = len(msg)
-        prev = 0
-        cur = 65
-        s = ""
-        while cur < l:
-            s += msg[prev:cur]
-            if cur-1 >= 0 and msg[cur-1] == " ":
-                s+="\n"
-            elif msg[cur] != " ":
-                s+="-"
-                s+="\n"
-            else:
-                cur+=1
-                s+="\n"
-            prev = cur
-            cur += 65
-        s+=msg[prev:]
+        # l = len(msg)
+        # prev = 0
+        # cur = 65
+        # s = ""
+        # while cur < l:
+        #     s += msg[prev:cur]
+        #     if cur-1 >= 0 and msg[cur-1] == " ":
+        #         s+="\n"
+        #     elif msg[cur] != " ":
+        #         s+="-"
+        #         s+="\n"
+        #     else:
+        #         cur+=1
+        #         s+="\n"
+        #     prev = cur
+        #     cur += 65
+        # s+=msg[prev:]
+
+        s=ChessGUI.textWrap(msg, width=65)
         self.prompt.setText(s)
 
     def updateWin(self):
         self.drawDiff(self.chessBoard-self.prevState)
+        self.desc.setText(ChessGUI.textWrap(getSnippet(self.words), 40))
         self.win.update()
         
     
@@ -318,12 +370,12 @@ class ChessGUI:
 
 if __name__ == '__main__':
     cGUI = ChessGUI()
-    cGUI.updatePrompt("hello there my name is alison this is a test because i don't know what else to say hello hello everything is awesome no i'm not qutoing a movieeee")
+    cGUI.updatePrompt("haha I changed your long string of text now it's this other long useless string of text wow incredible thislabhaspushedmetotheedjeofsanity")
     cGUI.updateWin()
+
 
     while not cGUI.isDone():
         cGUI.update()
-    
     
 
     
