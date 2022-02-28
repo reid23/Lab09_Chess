@@ -105,8 +105,6 @@ class ChessPiece(Image):
         # replace with moved chess piece
         newGameState[move[0]][move[1]][2] = newGameState[pos[0]][pos[1]][2]
         newGameState[pos[0]][pos[1]][2] = None
-        if newGameState[move[0]][move[1]][2] == None:
-            return False
         
         curColor = newGameState[move[0]][move[1]][2].color
             

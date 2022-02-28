@@ -135,10 +135,10 @@ class Board:
         for y in range(8):
             for x in range(8):
                 if self.getThing(x,y,2) != None:
-                    if self.getThing(x,y,2).color: # white
+                    if self.getThing(x,y,2).color and whiteCheckmate: # white
                         if len(self.getThing(x,y,2).calculatePossibleMoves(self.getGameState('allCopy'), (x,y))) != 0:
                             whiteCheckmate = False
-                    if not self.getThing(x,y,2).color: # black
+                    if not self.getThing(x,y,2).color and blackCheckmate: # black
                         if len(self.getThing(x,y,2).calculatePossibleMoves(self.getGameState('allCopy'), (x,y))) != 0:
                             blackCheckmate = False
         

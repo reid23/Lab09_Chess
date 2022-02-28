@@ -7,34 +7,34 @@
 # which is for getting the data from wikipedia,
 # parsing it, and saving it to csv.
 
-import requests
+# import requests
 from random import randint
 import re
 import pandas as pd
 
 
-def updateWikiWords():
-    response = requests.get(
-        'https://en.wikipedia.org/w/api.php',
-        params={
-            'action': 'query',
-            'format': 'json',
-            'titles': 'Chess',
-            'prop': 'extracts',
-            'explaintext': True,
-        }
-    ).json()
+# def updateWikiWords():
+    # response = requests.get(
+    #     'https://en.wikipedia.org/w/api.php',
+    #     params={
+    #         'action': 'query',
+    #         'format': 'json',
+    #         'titles': 'Chess',
+    #         'prop': 'extracts',
+    #         'explaintext': True,
+    #     }
+    # ).json()
 
-    text=response['query']['pages']['5134']['extract']
+    # text=response['query']['pages']['5134']['extract']
 
-    while '\n\n' in text:
-        text = re.sub('\n\n', '\n', text)
-    text=text.split(' ')
+    # while '\n\n' in text:
+    #     text = re.sub('\n\n', '\n', text)
+    # text=text.split(' ')
 
-    df=pd.DataFrame(text)
-    df.to_csv('wikiWords.csv', index=False)
+    # df=pd.DataFrame(text)
+    # df.to_csv('wikiWords.csv', index=False)
 
-    return text
+    # return text
 
 def loadWikiWords(file='wikiWords.csv'):
     with open(file, 'r') as f:
@@ -43,7 +43,7 @@ def loadWikiWords(file='wikiWords.csv'):
 
 def getSnippet(text, length=11963, snippetSize=45):
     r=randint(0, length-snippetSize)
-    return ' '.join(text[r:r+snippetSize])
+    return "\"" + ' '.join(text[r:r+snippetSize]) + "\""
 
 
 if __name__ == '__main__':

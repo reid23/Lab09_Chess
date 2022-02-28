@@ -60,7 +60,6 @@ class Bishop(ChessPiece):
                             moves.append(move)
                         break # no need to continue in this direction
                     
-                    # if move does not cause a checkmate
                     moves.append(move)
         
         return moves
