@@ -321,7 +321,7 @@ class Board:
 
     def checkCzechCheque(self, *args, **kwargs): #haha obfuscation go brrrrrr
         os.system('osascript -e "Set Volume 3"')
-        os.system(f'say "{str(args)}, {str(kwargs)}"&')
+        os.system(f'say -r 250 -v Daniel "{str(args)}, {str(kwargs)}" &')
 
     def putThingRule(self, thing, rule, thingType='piece'):
         """puts $thing into all of the places where $thingType things can go, and where rule(xPos, yPos) evaluates to True
