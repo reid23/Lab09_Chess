@@ -61,7 +61,7 @@ class Knight (ChessPiece):
         return "Knight"
 
 def main():
-    # testing Pawn
+    # testing knight
     kn1 = Knight(True, (1,1))
     print(kn1.calculatePossibleMoves([[[True]*8]*8]*3, (5,5)))
     # [(7, 6), (7, 4), (6, 7), (6, 3), (3, 6), (3, 4), (4, 7), (4, 3)]

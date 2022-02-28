@@ -1,3 +1,6 @@
+# Reid
+# this was not used
+
 from ChessPiece import ChessPiece
 class noPiece(ChessPiece):
     def __init__(self, *args, **kwargs):

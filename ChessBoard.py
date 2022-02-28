@@ -1,4 +1,6 @@
 # Chess Board
+# this was kind of a collaboration because we threw in extraneous methods that we needed for the GUI or the pieces here
+# but mostly Reid
 
 from graphics import Rectangle, Point, color_rgb
 import numpy as np #only needed for test func

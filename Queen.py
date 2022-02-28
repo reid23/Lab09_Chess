@@ -73,7 +73,7 @@ class Queen (ChessPiece):
 
 
 def main():
-    # testing Pawn
+    # testing queen
     win = GraphWin("testing", 800,700)
 
     q1 = Queen(True, (1,1))
