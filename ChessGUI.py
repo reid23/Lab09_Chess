@@ -289,7 +289,7 @@ class ChessGUI:
                 self.newMessage = "White won! Black king is in checkmate."
             else:
                 self.newMessage = "Black won! White king is in checkmate."
-            # self.updatePrompt(self.newMessage)
+            self.updatePrompt(self.newMessage)
             cont = False
         
         self.updateWin() # update the board! get diff from previous state, set previous state to current state

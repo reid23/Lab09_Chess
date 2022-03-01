@@ -3,7 +3,6 @@
 # but mostly Reid
 
 from graphics import Rectangle, Point, color_rgb
-import numpy as np #only needed for test func
 import os
 from ChessPiece import ChessPiece
 from Pawn import Pawn

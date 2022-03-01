@@ -196,4 +196,4 @@ class ChessPiece(Image):
         Returns:
             str: string of thing
         """
-        return ""
+        return self.__class__.__name__
