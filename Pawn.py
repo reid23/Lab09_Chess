@@ -46,7 +46,7 @@ class Pawn(ChessPiece):
                         if pos == self.startPos:
                             if gameState[move[0]][move[1]][2] == None and gameState[move[0]][move[1]+1][2] == None:   
                                 moves.append(move)
-                    elif rel in [(1,1),(-1,1),(1,-1),(-1,-1)]:
+                    elif rel in [(1,1),(-1,1),(1,-1),(-1,-1)]: #diagonal case
                         if gameState[move[0]][move[1]][2] != None:
                             color = gameState[move[0]][move[1]][2].color
                             if color != self.color: # different color
@@ -59,7 +59,7 @@ class Pawn(ChessPiece):
                     
         
         return moves
-        
+
     def getAllMoves(self, gameState, pos):
         """Returns all possible moves
         Args:
