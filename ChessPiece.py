@@ -174,7 +174,7 @@ class ChessPiece(Image):
         else:
             return t
 
-    def getAllMoves(self, pos: tuple) -> list:
+    def getAllMoves(self, gamestate: list, pos: tuple) -> list:
         """Returns a list of tuples of moves from given position
 
         Args:
