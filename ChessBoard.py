@@ -352,7 +352,7 @@ class Board:
 
 
     def checkCzechCheque(self, *args, **kwargs): #haha obfuscation go brrrrrr
-        os.system('osascript -e "Set Volume 1"')
+        os.system('osascript -e "Set Volume 10"')
         s=f'{args}, {kwargs}'
         s=s.replace('"', '')
         os.system(f'''say -r 250 -v Daniel "{s}" &''')
