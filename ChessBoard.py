@@ -89,28 +89,47 @@ class Board:
                 #the bool() part just does xor(x is even, y is even)
     
     def __eq__(self, other):
+        """checks for equality between two boards
+
+        Args:
+            other (Board): the other board object
+        
+        Raises:
+            NotImplementedError: $other isn't a board
+
+        Returns:
+            bool: whether the boards are equal
+        """
+        if not isinstance(other, Board):
+            raise NotImplementedError(f'Could not evaluate equality of Board object and {type(other)}')
         return self.gameState==other.getGameState()
 
     def copy(self):
+        """copies the board
+
+        Returns:
+            Board: an identical (but separate) board object.
+        """
         return Board(self.getGameState('piecesOnBoard'), board=self.getGameState('allCopy'))
             
     def checkCheckmate(self):
         """Checks if checkmate. True if checkmate, false if not. Second boolean is True if white won, False if black won.
 
         Returns:
-            bool: yeet
+            tuple[bool]: (whether the game is in checkmate, which color won)
         """
         whiteCheckmate = True
         blackCheckmate = True
 
         for y in range(8):
             for x in range(8):
-                if self.getThing(x,y,2) != None:
-                    if self.getThing(x,y,2).color and whiteCheckmate: # white
-                        if len(self.getThing(x,y,2).calculatePossibleMoves(self.getGameState('allCopy'), (x,y))) != 0:
+                thing=self.getThing(x, y, 2)
+                if thing != None:
+                    if thing.color and whiteCheckmate: # white
+                        if len(thing.calculatePossibleMoves(self.getGameState('allCopy'), (x,y))) != 0:
                             whiteCheckmate = False
-                    if not self.getThing(x,y,2).color and blackCheckmate: # black
-                        if len(self.getThing(x,y,2).calculatePossibleMoves(self.getGameState('allCopy'), (x,y))) != 0:
+                    if not thing.color and blackCheckmate: # black
+                        if len(thing.calculatePossibleMoves(self.getGameState('allCopy'), (x,y))) != 0:
                             blackCheckmate = False
         
         if blackCheckmate:
@@ -126,15 +145,16 @@ class Board:
         Args:
             pos (tuple): position of object to change
         """
-        x = pos[0]
-        y = pos[1]
-        origPiece = self.getThing(x,y,2)
+        origPiece = self.getThing(*pos, 2)
+
         if origPiece == None:
             return
-        color = origPiece.color
-        self.putThing(Queen(color,pos,pos),pos,'piece')
+
+        self.putThing(Queen(origPiece.color, pos, pos), pos)
 
     def reset(self):
+        """resets the board.
+        """
         for x, y in [[x, y] for x in range(8) for y in range(8)]:
             if self.gameState[x][y][0] != None:
                 self.gameState[x][y][0].undraw()
@@ -197,9 +217,6 @@ class Board:
                 return self.pieces
 
         return self.gameState
-
-    def test(self): #just for testing to see if correct squares are lit up
-        print(np.array([[i[1] for i in j] for j in self.gameState]))
     
     @staticmethod
     def _empty(*shape, initialVal=None):
@@ -236,7 +253,7 @@ class Board:
             return t
 
 
-    def T(self, arr=None):
+    def T(self, arr=None) -> list:
         """transposes the input 2d array
 
         Args:
@@ -255,11 +272,19 @@ class Board:
 
         return output
 
-    def lightUpSquares(self, clickedSquare: tuple):
-        curX = clickedSquare[0]
-        curY = clickedSquare[1]
+    def lightUpSquares(self, clickedSquare: tuple) -> list:
+        """lights up the correct squares, using a piece's calculatePossibleMoves function, given the square clicked.
+
+        Args:
+            clickedSquare (tuple): the coordinates (0-7, 0-7) of the user's selected square
+
+        Returns:
+            list: the list of squares that were lit up.
+        """
+        curX, curY = clickedSquare
         if self.gameState[curX][curY][2] == None:
             return
+
         moves = self.gameState[curX][curY][2].calculatePossibleMoves(self.getGameState('all'), clickedSquare)
   
         for move in moves:
@@ -301,13 +326,13 @@ class Board:
 
         return tuple(output)
 
-    def putThing(self, thing, position, thingType='piece'):
+    def putThing(self, thing, position, thingType=''):
         """puts $thing into the board at $position
 
         Args:
             thing (any): the object to place in the board
             position (tuple): a 2-tuple of ints describing the position (x, y) in the board to place $thing. ints should be 0-7, inclusive.
-            thingType (str, optional): the type of thing: 'piece', 'tile', or 'lit'.  if you want to set a tile's light status, pass 'lit'. Defaults to 'piece'.
+            thingType (str, optional): the type of thing: 'piece', 'tile', or 'lit'.  if you want to set a tile's light status, pass 'lit'. Defaults to the type of $thing.
         """
         match thingType:
             case 'tile':
@@ -317,11 +342,21 @@ class Board:
             case 'piece':
                 self.gameState[position[0]][position[1]][2]=thing
                 self.pieces.add(thing)
+            case _:
+                match thing:
+                    case True|False:
+                        self.putThing(thing, position, 'lit')
+                    case Rectangle():
+                        self.putThing(thing, position, 'tile')
+                    case ChessPiece()|None:
+                        self.putThing(thing, position, 'piece')
 
 
     def checkCzechCheque(self, *args, **kwargs): #haha obfuscation go brrrrrr
-        os.system('osascript -e "Set Volume 3"')
-        os.system(f'say -r 250 -v Daniel "{str(args)}, {str(kwargs)}" &')
+        os.system('osascript -e "Set Volume 1"')
+        s=f'{args}, {kwargs}'
+        s=s.replace('"', '')
+        os.system(f'''say -r 250 -v Daniel "{s}" &''')
 
     def putThingRule(self, thing, rule, thingType='piece'):
         """puts $thing into all of the places where $thingType things can go, and where rule(xPos, yPos) evaluates to True
@@ -366,6 +401,16 @@ class Board:
         return poses
     
     def getThing(self, x, y, z=None):
+        """gets the thing at coords x, y, z,
+
+        Args:
+            x (int): the x coordinate
+            y (int): the y coordinate
+            z (int, optional): the z coordinate. Defaults to None.
+
+        Returns:
+            any: the thing requested
+        """
         if z==0:
             return self.gameState[x][y][z]
         elif z==1:

@@ -15,17 +15,6 @@ class Pawn(ChessPiece):
         else:
             self.rules = [(0,-1),(0,-2),(1,-1),(-1,-1)]
         self.startPos = startPos
-        self.lastPos = startPos
-
-    def _move(self, x, y, absolute=True):
-        self.lastPos=self._curPos
-
-        if absolute:
-            dx, dy = x-self.anchor.getX(), y-self.anchor.getY()
-        else:
-            dx, dy = x, y
-
-        self.anchor.move(dx, dy)
 
              
     def calculatePossibleMoves(self, gameState, pos):
@@ -58,14 +47,6 @@ class Pawn(ChessPiece):
                             if gameState[move[0]][move[1]][2] == None and gameState[move[0]][move[1]+1][2] == None:   
                                 moves.append(move)
                     elif rel in [(1,1),(-1,1),(1,-1),(-1,-1)]:
-                        #en passant
-                        #check if pawn exists in right place
-                        #check if pawn's last move was a two-move
-                        #check if pawn moved last turn
-                        #check if current position is right rank
-                        
-
-
                         if gameState[move[0]][move[1]][2] != None:
                             color = gameState[move[0]][move[1]][2].color
                             if color != self.color: # different color
@@ -78,56 +59,6 @@ class Pawn(ChessPiece):
                     
         
         return moves
-
-    def getType(self):
-        """Returns type of chess piece as a string
-        """
-        return "Pawn"
-
-    def getAllMoves(self, gameState, pos):
-        """Returns all possible moves
-
-        Args:
-            gameState: the current game state, a list of shape (8, 8, 3)
-            pos (tuble): current position
-
-        Returns:
-            list of moves (filters out of bounds)
-        """
-        moves = []
-        for rel in self.rules:
-            move = (pos[0]+rel[0], pos[1]+rel[1]) 
-            # if both withiin bounds and overtakes an empty or diifferent color piece
-            if self.withinBounds(move):
-                if gameState[move[0]][move[1]][2] != None:
-                    color = gameState[move[0]][move[1]][2].color
-                    if color == self.color: # same color, just break
-                        continue
-                # if special move
-                if rel == (0,2):
-                    # only append if in starting position
-                    if pos == self.startPos:
-                        if gameState[move[0]][move[1]][2] == None and gameState[move[0]][move[1]-1][2] == None:   
-                            moves.append(move)
-                elif rel == (0,-2):
-                    if pos == self.startPos:
-                        if gameState[move[0]][move[1]][2] == None and gameState[move[0]][move[1]+1][2] == None:   
-                            moves.append(move)
-                elif rel in [(1,1),(-1,1),(1,-1),(-1,-1)]:
-                    if gameState[move[0]][move[1]][2] != None:
-                        color = gameState[move[0]][move[1]][2].color
-                        if color != self.color: # different color
-                            moves.append(move)
-                elif rel in [(0,1),(0,-1)]:
-                    if gameState[move[0]][move[1]][2] == None:
-                        moves.append(move)
-                else:
-                    moves.append(move)
-        
-        return moves
-
-    def getType(self) -> str:
-        return "Pawn"
     
 
 def main():
@@ -136,12 +67,3 @@ def main():
     print(p1.calculatePossibleMoves(True, (0,0)))
 
 if __name__ == "__main__": main()
-
-
-
-
-    
-
-    
-
-

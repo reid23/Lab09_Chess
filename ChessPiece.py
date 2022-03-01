@@ -1,5 +1,4 @@
 # A general chess piece (Reid)
-from tkinter import E
 from graphics import Image, Point
 
 class ChessPiece(Image):
@@ -27,6 +26,11 @@ class ChessPiece(Image):
         self.anchor.move(dx, dy)
 
     def copy(self):
+        """returns a copy of the peice
+
+        Returns:
+            type(self): a copy of self.
+        """
         return type(self)(color=self._color, pos=self._curPos, startPos=self._startPos)
     
     def __repr__(self):
@@ -36,9 +40,22 @@ class ChessPiece(Image):
         return f"{'White' if self._color else 'Black'} {self.__class__.__name__}"
     
     def __hash__(self):
+        """hash yoself. just so we can put peices into a set
+
+        Returns:
+            hash: the unique hash representing this object
+        """
         return hash(repr(self))
     
     def __eq__(self, other):
+        """equality implementation for chess pieces
+
+        Args:
+            other (ChessPiece): the other piece
+
+        Returns:
+            bool: whether the pieces are identical
+        """
         return isinstance(other, type(self)) and self._color==other.color and self._curPos==other.curPos
     
     def setPos(self, oldPos, newPos):
