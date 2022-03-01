@@ -96,7 +96,7 @@ class ChessGUI:
         self.hasSelected = False
         self.clickedLitPiece = False
         self.newMessage = "Welcome to a new game of chess! It is White's turn."
-        self.updatePrompt("Welcome to a new game of chess! It is White's turn.")
+        self.updatePrompt(self.newMessage)
 
     @staticmethod
     def textWrap(text, width, center=True):
@@ -253,7 +253,7 @@ class ChessGUI:
                 self.newMessage = "White won! Black king is in checkmate."
             else: # black won
                 self.newMessage = "Black won! White king is in checkmate."
-            self.updatePrompt(self.newMessage) # update the prompt bx
+            #self.updatePrompt(self.newMessage) # update the prompt bx
             cont = False # finish
 
         if self.quitButton.clicked(pt): # if quit button pressed
@@ -263,6 +263,7 @@ class ChessGUI:
         elif self.replayButton.clicked(pt): # if replay button pressed
             self.done = False
             self.resetGame()
+            return
         elif cont and self.coordClicked(pt): # as long as no checkmate is detected, continue with coord clicked method
             # next step of turn is to choose square... just a progression of steps for turn
             # 1) select piece to move (if the coord clicked is not your piece, do not use it)
@@ -272,13 +273,10 @@ class ChessGUI:
                 self.clickedLitPiece = False
                 self.curPlayer = not self.curPlayer # change the player!
                 if self.curPlayer:
-                    self.updatePrompt(self.newMessage+" It is White's turn!")
+                    self.newMessage += " It is White's turn!"
                 else:
-                    self.updatePrompt(self.newMessage+" It is Black's turn!")
-            else:
-                self.updatePrompt(self.newMessage)
+                    self.newMessage += " It is Black's turn!"
         else: # base case
-            self.updatePrompt(self.newMessage)
             for pos in self.curLitUp:
                 self.chessBoard.putThing(False, pos, 'lit')
             self.hasSelected = False
@@ -289,8 +287,10 @@ class ChessGUI:
                 self.newMessage = "White won! Black king is in checkmate."
             else:
                 self.newMessage = "Black won! White king is in checkmate."
-            self.updatePrompt(self.newMessage)
+            #self.updatePrompt(self.newMessage)
             cont = False
+        
+        self.updatePrompt(self.newMessage)
         
         self.updateWin() # update the board! get diff from previous state, set previous state to current state
 
