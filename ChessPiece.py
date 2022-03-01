@@ -33,21 +33,21 @@ class ChessPiece(Image):
         """
         return type(self)(color=self._color, pos=self._curPos, startPos=self._startPos)
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self._color}, {self._curPos})"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{'White' if self._color else 'Black'} {self.__class__.__name__}"
     
-    def __hash__(self):
+    def __hash__(self) -> int:
         """hash yoself. just so we can put peices into a set
 
         Returns:
-            hash: the unique hash representing this object
+            int: the unique hash representing this object
         """
         return hash(repr(self))
     
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         """equality implementation for chess pieces
 
         Args:
@@ -58,17 +58,17 @@ class ChessPiece(Image):
         """
         return isinstance(other, type(self)) and self._color==other.color and self._curPos==other.curPos
     
-    def setPos(self, oldPos, newPos):
+    def setPos(self, oldPos: tuple, newPos: tuple):
         self._move((newPos[0]-oldPos[0])*10, (newPos[1]-oldPos[1])*10, False)
         self._curPos = (int(newPos[0]), int(newPos[1]))
     
     @property
-    def curPos(self):
+    def curPos(self) -> tuple:
         """shouldn't be used directly, just enables doing ChessPiece.curPos to get the position without violating encapsulation (ie this is read-only)"""
         return self._curPos
     
     @property
-    def color(self):
+    def color(self) -> bool:
         """shouldn't be used directly, just enables doing ChessPiece.color to get the color without violating encapsulation (ie this is read-only)"""
         return self._color
 
@@ -141,7 +141,7 @@ class ChessPiece(Image):
 
 
     @staticmethod
-    def _empty(*shape, initialVal=None):
+    def _empty(*shape: int, initialVal=None) -> list:
         """generates a list with the given shape, whose values are initialVal
 
         Args:
@@ -174,7 +174,7 @@ class ChessPiece(Image):
         else:
             return t
 
-    def getAllMoves(self, pos):
+    def getAllMoves(self, pos: tuple) -> list:
         """Returns a list of tuples of moves from given position
 
         Args:
