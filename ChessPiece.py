@@ -157,10 +157,10 @@ class ChessPiece(Image):
         for i in shape:
             output=output*i
             output=(output,)
-        return ChessPiece.convert(output[0]) #convert to list, and take out extra dimension from previous line on last iteration
+        return ChessPiece._convert(output[0]) #convert to list, and take out extra dimension from previous line on last iteration
     
     @staticmethod
-    def convert(t): #recursion go brrrrr
+    def _convert(t): #recursion go brrrrr
         """converts a tuple to a list recursively
 
         Args:
@@ -170,7 +170,7 @@ class ChessPiece(Image):
             list: the same thing as the input, but as a list
         """
         if isinstance(t, tuple):
-            return list(ChessPiece.convert(i) for i in t)
+            return list(ChessPiece._convert(i) for i in t)
         else:
             return t
 

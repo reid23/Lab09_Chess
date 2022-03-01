@@ -235,10 +235,10 @@ class Board:
         for i in shape:
             output=output*i
             output=(output,)
-        return Board.convert(output[0]) #convert to list, and take out extra dimension from previous line on last iteration
+        return Board._convert(output[0]) #convert to list, and take out extra dimension from previous line on last iteration
     
     @staticmethod
-    def convert(t): #recursion go brrrrr
+    def _convert(t): #recursion go brrrrr
         """converts a tuple to a list recursively
 
         Args:
@@ -248,12 +248,12 @@ class Board:
             list: the same thing as the input, but as a list
         """
         if isinstance(t, tuple):
-            return list(Board.convert(i) for i in t)
+            return list(Board._convert(i) for i in t)
         else:
             return t
 
 
-    def T(self, arr=None) -> list:
+    def _T(self, arr=None) -> list:
         """transposes the input 2d array
 
         Args:
@@ -503,7 +503,7 @@ class Board:
             if self.n==8: raise StopIteration
 
             while True:
-                output=self.T()[self.n].copy()
+                output=self._T()[self.n].copy()
                 if self.descriminator(output): break
                 self.n+=1
 
