@@ -1,7 +1,7 @@
 # Queen Chess Piece (Alison)
 from ChessPiece import ChessPiece # remove later
 
-class Queen (ChessPiece):
+class Queen(ChessPiece):
     """Defines a Queen chess piece for a chess game"""
 
     def __init__(self, color, pos,startPos):
@@ -38,6 +38,29 @@ class Queen (ChessPiece):
                     # if move does not cause a checkmate
                     if (not self.checkCheck(gameState, pos, move, self.color)):
                         moves.append(move)
+        
+        return moves
+    def getAllMoves(self, gameState, pos):
+        """Returns all possible moves
+        Args:
+            gameState: the current game state, a list of shape (8, 8, 3)
+            pos (tuble): current position
+        Returns:
+            list of moves (filters out of bounds)
+        """
+        moves = []
+        for rel in self.rules:
+            for i in range(1,8): # as far as the Queen wants bc powerful!
+                move = (pos[0]+rel[0]*i, pos[1]+rel[1]*i) #convert to absolute position
+                # if both withiin bounds and overtakes an empty or diifferent color piece
+                if self.withinBounds(move):
+                    if gameState[move[0]][move[1]][2] != None:
+                        color = gameState[move[0]][move[1]][2].color
+                        if color != self.color:
+                            moves.append(move)
+                        break # no need to continue in this direction
+                    
+                    moves.append(move)
         
         return moves
 

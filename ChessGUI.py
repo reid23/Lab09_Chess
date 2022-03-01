@@ -7,7 +7,7 @@ from Text import getSnippet, loadWikiWords
 class ChessGUI:
     """GUI for a chess game"""
 
-    def __init__(self):
+    def __init__(self, quiet=False):
         """Creates a new ChessGUI
 
         Args:
@@ -38,6 +38,7 @@ class ChessGUI:
         self.desc.draw(self.win)
 
         # prompt box
+        self.quiet = quiet
         promptBox = Rectangle(Point(0,-24),Point(80,-4))
         promptBox.setFill('lightgrey')
         promptBox.setOutline("lightgrey")
@@ -68,7 +69,6 @@ class ChessGUI:
 
         self.newMessage = ""
 
-    
     def resetGame(self):
         """Draws the starting board, resets the game
         """
@@ -149,7 +149,8 @@ class ChessGUI:
         Args:
             msg (str): new message for prompt box
         """
-        self.chessBoard.checkCzechCheque(msg)
+        if not self.quiet:
+            self.chessBoard.checkCzechCheque(msg)
         s=ChessGUI.textWrap(msg, width=65)
         self.prompt.setText(s)
 

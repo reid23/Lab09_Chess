@@ -2,10 +2,13 @@
 
 from graphics import *
 from ChessGUI import ChessGUI
+import sys
 
 
 def main():
-    game = ChessGUI()
+
+    game = ChessGUI('-q' in sys.argv or '--quiet' in sys.argv)
+
     try:
         while not game.isDone():
             game.update()

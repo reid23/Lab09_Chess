@@ -1,7 +1,6 @@
 # King Chess Piece (Reid)
 
 from ChessPiece import ChessPiece
-from graphics import *
 class King(ChessPiece):
     def __init__(self, color, pos, startPos):
         super().__init__(color, pos, startPos)
