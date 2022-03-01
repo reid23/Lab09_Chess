@@ -49,6 +49,29 @@ class King(ChessPiece):
             movSet.append(mov)
         # print(self.color, movSet)
         return movSet
+def getAllMoves(self, gameState, pos):
+        """Returns all possible moves
+
+        Args:
+            gameState: the current game state, a list of shape (8, 8, 3)
+            pos (tuble): current position
+
+        Returns:
+            list of moves (filters out of bounds)
+        """
+
+        movSet = []
+        for rel in self.rules:
+            mov = (rel[0]+pos[0], rel[1]+pos[1])
+            if not self.withinBounds(mov): 
+                continue
+            if gameState[mov[0]][mov[1]][2] != None:
+                color = gameState[mov[0]][mov[1]][2].color
+                if color == self.color: # same color, just break
+                    continue
+            movSet.append(mov)
+        # print(self.color, movSet)
+        return movSet
 
     def getType(self) -> str:
         return "King"

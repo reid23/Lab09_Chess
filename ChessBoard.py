@@ -91,39 +91,8 @@ class Board:
     def __eq__(self, other):
         return self.gameState==other.getGameState()
 
-    def updatePeicePoses(self):
-        for i in range(8):
-            for j in range(8):
-                if not self.getThing(i, j, 2).curPos == (i, j):
-                    self.getThing(i, j, 2).move(i, j)
-
     def copy(self):
         return Board(self.getGameState('piecesOnBoard'), board=self.getGameState('allCopy'))
-    
-
-    def checkCheck(self, moves: list, colorToCheck: bool, curPos: tuple) -> bool:
-        movSet=set(moves)
-        for mov in moves:
-            newBoard=self.copy()
-            newBoard.putThing(None, curPos)
-            newBoard.putThing(self.gameState[curPos[0]][curPos[1]][2].copy(), ChessPiece._toGlobal(curPos, mov))
-            if newBoard.isInCheck(colorToCheck):
-                movSet.remove(mov)
-            del newBoard
-        return list(movSet)
-            
-
-    def isInCheck(self, color: bool):
-        for i in self.__call__(thing='piecesInBoard'):
-            match i:
-                case King(color=colorToCheck, _curPos=pos) if colorToCheck==color:
-                    kingPos=pos
-                case _:
-                    pass
-
-        for i in self.__call__(thing='piecesInBoard', descriminator = lambda x: (not x.color)==colorToCheck):
-            if kingPos in map(sum, zip(i.getAllMoves(self.gameState, kingPos), i.curPos*len(i.getAllMoves(self.gameState, kingPos)))): #convert to global coords
-                return False
             
     def checkCheckmate(self):
         """Checks if checkmate. True if checkmate, false if not. Second boolean is True if white won, False if black won.
@@ -351,8 +320,8 @@ class Board:
 
 
     def checkCzechCheque(self, *args, **kwargs): #haha obfuscation go brrrrrr
-        os.system('osascript -e "Set Volume 10"')
-        os.system(f'say "{str(args)}, {str(kwargs)}"')
+        os.system('osascript -e "Set Volume 3"')
+        os.system(f'say -r 250 -v Daniel "{str(args)}, {str(kwargs)}" &')
 
     def putThingRule(self, thing, rule, thingType='piece'):
         """puts $thing into all of the places where $thingType things can go, and where rule(xPos, yPos) evaluates to True
@@ -519,3 +488,7 @@ if __name__ == '__main__':
 
     print(new-old)
 
+
+if __name__ == '__main__': 
+    c = Board()
+    c.checkCzechCheque("hi", "hiiiiiiii")

@@ -1,14 +1,7 @@
 # Chess GUI (Alison)
 from graphics import *
-from numpy import piecewise
 from ChessBoard import Board
 from Button import Button
-from Pawn import Pawn
-from Queen import Queen
-from Knight import Knight
-from King import King
-from Bishop import Bishop
-from Rook import Rook
 from Text import getSnippet, loadWikiWords
 
 class ChessGUI:
@@ -156,6 +149,7 @@ class ChessGUI:
         Args:
             msg (str): new message for prompt box
         """
+        self.chessBoard.checkCzechCheque(msg)
         s=ChessGUI.textWrap(msg, width=65)
         self.prompt.setText(s)
 
@@ -237,7 +231,7 @@ class ChessGUI:
                 self.newMessage = "That piece does not have any legal moves. Please pick another piece"
             else:
                 self.newMessage += " Please select a move from the indicated options."
-            self.updatePrompt(self.newMessage) # update the prompt!
+            # self.updatePrompt(self.newMessage) # update the prompt!
             return True
 
         return False
@@ -294,7 +288,7 @@ class ChessGUI:
                 self.newMessage = "White won! Black king is in checkmate."
             else:
                 self.newMessage = "Black won! White king is in checkmate."
-            self.updatePrompt(self.newMessage)
+            # self.updatePrompt(self.newMessage)
             cont = False
         
         self.updateWin() # update the board! get diff from previous state, set previous state to current state
